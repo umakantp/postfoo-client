@@ -1,0 +1,11 @@
+fragment MyUserResponse on User {
+  id
+  firstName
+  lastName
+  name
+  mobile
+  token
+  status
+  isVerified
+  isBlocked
+}

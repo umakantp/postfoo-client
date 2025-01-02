@@ -17,13 +17,13 @@ import { cn } from 'src/utils/utils'
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
+type FormData = z.infer<typeof signinSchema>
+
 const signIn = async (data: FormData & { callbackUrl: string }) => {
   // no op
   await new Promise(resolve => setTimeout(resolve, 1000))
   return { ok: true }
 }
-
-type FormData = z.infer<typeof signinSchema>
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const {
@@ -34,7 +34,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     resolver: zodResolver(signinSchema),
   })
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false)
   const searchParams = useSearchParams()
 
   async function onSubmit(data: FormData) {
@@ -76,7 +75,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading || isGitHubLoading}
+              disabled={isLoading}
               {...register('mobile')}
             />
             {errors?.mobile && (
@@ -93,7 +92,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               id="password"
               placeholder="********"
               type="password"
-              disabled={isLoading || isGitHubLoading}
+              disabled={isLoading}
               {...register('password')}
             />
             {errors?.password && (
