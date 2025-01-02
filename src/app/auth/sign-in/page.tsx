@@ -1,11 +1,11 @@
 import { Metadata } from 'next'
-import Link from "next/link"
+import Link from 'next/link'
 import * as React from 'react'
 import { UserAuthForm } from 'src/components/user-auth-form'
 
 export const metadata: Metadata = {
-  title: "Login",
-  description: "Login to your account",
+  title: 'Login',
+  description: 'Login to your account',
 }
 
 const Page: React.FC = () => {

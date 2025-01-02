@@ -1,4 +1,4 @@
-import * as z from "zod"
+import * as z from 'zod'
 
 export const signinSchema = z.object({
   mobile: z.string().min(10).max(10),

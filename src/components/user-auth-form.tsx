@@ -1,19 +1,19 @@
-"use client"
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useSearchParams } from "next/navigation"
-import * as React from "react"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useSearchParams } from 'next/navigation'
+import * as React from 'react'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 
-import Link from "next/link"
-import { buttonVariants } from "src/components/ui/button"
-import { Icons } from "src/components/ui/icons"
-import { Input } from "src/components/ui/input"
-import { Label } from "src/components/ui/label"
-import { signinSchema } from "src/utils/form"
-import { toast } from "src/utils/toast"
-import { cn } from "src/utils/utils"
+import Link from 'next/link'
+import { buttonVariants } from 'src/components/ui/button'
+import { Icons } from 'src/components/ui/icons'
+import { Input } from 'src/components/ui/input'
+import { Label } from 'src/components/ui/label'
+import { signinSchema } from 'src/utils/form'
+import { toast } from 'src/utils/toast'
+import { cn } from 'src/utils/utils'
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -43,27 +43,27 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const signInResult = await signIn({
       mobile: data.mobile,
       password: data.password,
-      callbackUrl: searchParams?.get("from") || "/dashboard",
+      callbackUrl: searchParams?.get('from') || '/dashboard',
     })
 
     setIsLoading(false)
 
     if (!signInResult?.ok) {
       return toast({
-        title: "Something went wrong.",
-        description: "Your sign in request failed. Please try again.",
-        variant: "destructive",
+        title: 'Something went wrong.',
+        description: 'Your sign in request failed. Please try again.',
+        variant: 'destructive',
       })
     }
 
     return toast({
-      title: "Check your email",
-      description: "We sent you a login link. Be sure to check your spam too.",
+      title: 'Check your email',
+      description: 'We sent you a login link. Be sure to check your spam too.',
     })
   }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <div className={cn('grid gap-6', className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -77,7 +77,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoComplete="email"
               autoCorrect="off"
               disabled={isLoading || isGitHubLoading}
-              {...register("mobile")}
+              {...register('mobile')}
             />
             {errors?.mobile && (
               <p className="px-1 text-xs text-red-600">
@@ -94,7 +94,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               placeholder="********"
               type="password"
               disabled={isLoading || isGitHubLoading}
-              {...register("password")}
+              {...register('password')}
             />
             {errors?.password && (
               <p className="px-1 text-xs text-red-600">
