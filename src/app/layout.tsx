@@ -1,10 +1,16 @@
+'use client'
+
+import { ApolloProvider } from '@apollo/client'
 import { Inter as FontSans } from 'next/font/google'
 import localFont from 'next/font/local'
 import * as React from 'react'
+import AuthProvider from 'src/components/auth-provider'
 
 import ThemeProvider from 'src/components/theme-provider'
 import { Toaster } from 'src/components/ui/toaster'
 import 'src/styles/global.css'
+import { getClient } from 'src/utils/apolloClient'
+import { get, storageKeys } from 'src/utils/storage'
 import { cn } from 'src/utils/utils'
 
 const fontSans = FontSans({
@@ -23,6 +29,8 @@ interface RootLayoutProps {
 }
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
+  const token = get<string | undefined>(storageKeys.AUTH_TOKEN)
+  const queryClient = getClient(token)
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -33,10 +41,16 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
           fontHeading.variable
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <ApolloProvider client={queryClient}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <AuthProvider>
+              <>
+                {children}
+                <Toaster />
+              </>
+            </AuthProvider>
+          </ThemeProvider>
+        </ApolloProvider>
       </body>
     </html>
   )

@@ -22,6 +22,7 @@ export default [
       '@stylistic/ts/object-curly-newline': ['error', { "consistent": true }],
       '@stylistic/js/arrow-parens': ['error', 'as-needed', { "requireForBlockBody": true }],
       'require-await': 'error',
+      'no-console': 'warn',
     },
   },
 ]

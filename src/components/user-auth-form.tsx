@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useSearchParams } from 'next/navigation'
+import { redirect, useSearchParams } from 'next/navigation'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -11,7 +11,12 @@ import { buttonVariants } from 'src/components/ui/button'
 import { Icons } from 'src/components/ui/icons'
 import { Input } from 'src/components/ui/input'
 import { Label } from 'src/components/ui/label'
+import { PhoneInput } from 'src/components/ui/phone-input'
+import { useSignInMutation } from 'src/generated/graphql'
+import { routes } from 'src/utils/constants'
 import { signinSchema } from 'src/utils/form'
+import logger from 'src/utils/logger'
+import { set, storageKeys } from 'src/utils/storage'
 import { toast } from 'src/utils/toast'
 import { cn } from 'src/utils/utils'
 
@@ -19,45 +24,41 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 type FormData = z.infer<typeof signinSchema>
 
-const signIn = async (data: FormData & { callbackUrl: string }) => {
-  // no op
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  return { ok: true }
-}
-
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   const {
     register,
+    getValues,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(signinSchema),
   })
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const searchParams = useSearchParams()
+  const [signIn, { loading: isLoading }] = useSignInMutation({ fetchPolicy: 'no-cache' })
 
   async function onSubmit(data: FormData) {
-    setIsLoading(true)
-
-    const signInResult = await signIn({
-      mobile: data.mobile,
-      password: data.password,
-      callbackUrl: searchParams?.get('from') || '/dashboard',
-    })
-
-    setIsLoading(false)
-
-    if (!signInResult?.ok) {
-      return toast({
-        title: 'Something went wrong.',
-        description: 'Your sign in request failed. Please try again.',
-        variant: 'destructive',
+    try {
+      const signInResult = await signIn({
+        variables: {
+          input: {
+            mobile: data.mobile,
+            password: data.password,
+          },
+        },
       })
-    }
 
-    return toast({
-      title: 'Check your email',
-      description: 'We sent you a login link. Be sure to check your spam too.',
+      if (signInResult.data) {
+        const user = signInResult.data.signIn
+        set(storageKeys.AUTH_TOKEN, user.token)
+        return redirect(searchParams?.get('from') || routes.HOME)
+      }
+    } catch (error) {
+      logger.error(error)
+    }
+    toast({
+      description: 'Username or password is incorrect. Please try again.',
+      variant: 'destructive',
     })
   }
 
@@ -66,17 +67,22 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
-            <Label htmlFor="email">
-              Email
+            <Label htmlFor="mobile">
+              Mobile
             </Label>
-            <Input
-              id="email"
-              placeholder="name@example.com"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
+            <PhoneInput
+              id="mobile"
+              countries={['IN']}
+              defaultCountry="IN"
               disabled={isLoading}
               {...register('mobile')}
+              onBlur={() => {
+                // no op this breaks the phone input
+              }}
+              value={getValues('mobile')}
+              onChange={(value: string) => {
+                setValue('mobile', value)
+              }}
             />
             {errors?.mobile && (
               <p className="px-1 text-xs text-red-600">
@@ -122,3 +128,5 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     </div>
   )
 }
+
+export default UserAuthForm
