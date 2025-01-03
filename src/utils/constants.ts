@@ -1,6 +1,8 @@
 export const routes: Record<string, string> = {
   // Public routes
   HOME: '/',
+  TERMS_OF_SERVICE: '/content/terms-of-service',
+  PRIVACY_POLICY: '/content/privacy-policy',
 
   // Auth routes but not protected
   SIGN_IN: '/auth/sign-in',

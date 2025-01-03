@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import * as React from 'react'
-import UserAuthForm from 'src/components/user-auth-form'
+import SignInForm from 'src/components/sign-in-form'
+import { routes } from 'src/utils/constants'
 
 export const metadata: Metadata = {
   title: 'Login',
@@ -21,10 +22,10 @@ const Page: React.FC = () => {
             Login to your PostFoo account
           </p>
         </div>
-        <UserAuthForm />
+        <SignInForm />
         <p className="px-8 text-center text-sm text-muted-foreground">
           Don&apos;t have an account? <Link
-            href="/auth/sign-up"
+            href={routes.SIGN_UP}
             className="hover:text-brand underline underline-offset-4"
           >
             Sign Up
