@@ -20,7 +20,7 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
       const item = window.localStorage.getItem(key)
       // Parse stored json or if none return initialValue
       return item ? JSON.parse(item) : initialValue
-    } catch (_err) {
+    } catch {
       // If error also return initialValue
       // logger.error(err)
       return initialValue
@@ -48,4 +48,18 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
 
 export const removeTrailingSlash = (path: string) => {
   return path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path
+}
+
+export const setFormErrors = (error: any, setError: any) => {
+  if (error.graphQLErrors) {
+    error.graphQLErrors.map((err: any) => {
+      if (err?.extensions?.fieldName) {
+        setError(err.extensions.fieldName, {
+          message: err.message,
+        })
+      }
+    })
+  } else {
+    logger.error(error)
+  }
 }

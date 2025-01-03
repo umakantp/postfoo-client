@@ -13,6 +13,10 @@ const mobileSchema = z.string()
   // Check if the mobile number is valid & starts with +91
   .regex(/^(\+91)?[0-9]{10}$/, 'Only Indian mobile numbers are supported')
 
+const otpCodeSchema = z.string()
+  .length(6, 'Provide complete OTP code')
+  .regex(/^\d+$/, 'OTP must contain only numbers')
+
 export const signinSchema = z.object({
   mobile: mobileSchema,
   password: passwordSchema,
@@ -34,5 +38,19 @@ export const signupSchema = z.object({
 })
 
 export const verifyCodeSchema = z.object({
-  code: z.string().length(6, 'Provide complete OTP code').regex(/^\d+$/, 'OTP must contain only numbers'),
+  code: otpCodeSchema,
+})
+
+export const forgotPasswordSchema = z.object({
+  mobile: mobileSchema,
+})
+
+export const resetPasswordSchema = z.object({
+  mobile: mobileSchema,
+  code: otpCodeSchema,
+  password: passwordSchema,
+  confirmPassword: passwordSchema,
+}).refine(data => data.confirmPassword === data.password, {
+  message: 'Passwords do not match',
+  path: ['confirmPassword'],
 })

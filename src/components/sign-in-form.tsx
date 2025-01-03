@@ -13,6 +13,7 @@ import { Input } from 'src/components/ui/input'
 import { Label } from 'src/components/ui/label'
 import { PhoneInput } from 'src/components/ui/phone-input'
 import { useSignInMutation } from 'src/generated/graphql'
+import { routes } from 'src/utils/constants'
 import { signinSchema } from 'src/utils/form'
 import { useNavigation } from 'src/utils/history'
 import logger from 'src/utils/logger'
@@ -21,7 +22,7 @@ import { cn } from 'src/utils/utils'
 
 type FormData = z.infer<typeof signinSchema>
 
-const UserAuthForm: React.FC = () => {
+const SignInForm: React.FC = () => {
   const {
     register,
     getValues,
@@ -116,7 +117,7 @@ const UserAuthForm: React.FC = () => {
           <div className="grid gap-1 my-3">
             <p className="text-right text-sm text-muted-foreground">
               <Link
-                href="/auth/forgot-password"
+                href={routes.FORGOT_PASSWORD}
                 className="hover:text-brand underline underline-offset-4"
               >
                 Forgot Password?
@@ -135,4 +136,4 @@ const UserAuthForm: React.FC = () => {
   )
 }
 
-export default UserAuthForm
+export default SignInForm

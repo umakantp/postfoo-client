@@ -12,12 +12,24 @@ mutation signUp($input: SignUpInput!) {
 
 mutation verifyCode($input: VerifyCodeInput!) {
   verifyCode(input: $input) {
-    ...GuestUserResponse
+    error
   }
 }
 
 mutation resendCode($input: ResendCodeInput!) {
   resendCode(input: $input) {
+    error
+  }
+}
+
+mutation forgotPassword($input: ForgotPasswordInput!) {
+  forgotPassword(input: $input) {
+    error
+  }
+}
+
+mutation resetPassword($input: ResetPasswordInput!) {
+  resetPassword(input: $input) {
     error
   }
 }

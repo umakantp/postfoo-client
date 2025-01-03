@@ -13,13 +13,12 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from 'src/components/ui/input-o
 import { useResendCodeMutation, useVerifyCodeMutation } from 'src/generated/graphql'
 import { verifyCodeSchema } from 'src/utils/form'
 import { useNavigation } from 'src/utils/history'
-import logger from 'src/utils/logger'
 import { toast } from 'src/utils/toast'
-import { cn } from 'src/utils/utils'
+import { cn, setFormErrors } from 'src/utils/utils'
 
 type FormData = z.infer<typeof verifyCodeSchema>
 
-const UserAuthForm: React.FC = () => {
+const VerifyCodeForm: React.FC = () => {
   const {
     getValues,
     setValue,
@@ -85,17 +84,7 @@ const UserAuthForm: React.FC = () => {
         return navigate('SIGN_IN', {}, {}, true)
       }
     } catch (error: any) {
-      if (error.graphQLErrors) {
-        error.graphQLErrors.map((err: any) => {
-          if (err?.extensions?.fieldName) {
-            setError(err.extensions.fieldName, {
-              message: err.message,
-            })
-          }
-        })
-      } else {
-        logger.error(error)
-      }
+      setFormErrors(error, setError)
     }
   }
   const [timer, setTimer] = React.useState(60)
@@ -151,4 +140,4 @@ const UserAuthForm: React.FC = () => {
   )
 }
 
-export default UserAuthForm
+export default VerifyCodeForm

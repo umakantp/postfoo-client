@@ -18,7 +18,7 @@ import { cn } from 'src/utils/utils'
 
 type FormData = z.infer<typeof signupSchema>
 
-const UserAuthForm: React.FC = () => {
+const SignUpForm: React.FC = () => {
   const {
     register,
     getValues,
@@ -168,4 +168,4 @@ const UserAuthForm: React.FC = () => {
   )
 }
 
-export default UserAuthForm
+export default SignUpForm

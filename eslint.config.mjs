@@ -24,7 +24,8 @@ export default [
       'require-await': 'error',
       'no-console': 'warn',
       'no-debugger': 'warn',
-      '@typescript-eslint/no-unused-vars': ['error', { "argsIgnorePattern": "^_" }],
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { "argsIgnorePattern": "^_", varsIgnorePattern: "^_" }],
     },
   },
 ]
