@@ -21,16 +21,16 @@ const MainNav: React.FC = () => {
       href: routes.HOME,
     },
     {
+      title: 'Pricing',
+      href: routes.PRICING,
+    },
+    {
       title: 'Sign In',
       href: routes.SIGN_IN,
     },
     {
       title: 'Sign Up',
       href: routes.SIGN_UP,
-    },
-    {
-      title: 'Pricing',
-      href: routes.PRICING,
     },
   ]
 

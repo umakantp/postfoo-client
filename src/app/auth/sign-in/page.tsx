@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 
 const Page: React.FC = () => {
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
+    <div className="container flex h-screen w-screen flex-col mt-8">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center">
-          <div className="flex flex-col space-y-2" style={{ background: 'url(/images/logo.svg) no-repeat center center', height: '100px' }}></div>
+          <div className="flex flex-col space-y-2 mb-10" style={{ background: 'url(/images/logo.svg) no-repeat center center', height: '100px' }}></div>
           <h1 className="text-2xl font-semibold tracking-tight">
             Welcome back
           </h1>

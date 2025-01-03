@@ -1,9 +1,7 @@
 import Link from 'next/link'
 import * as React from 'react'
 import SignUpForm from 'src/components/sign-up-form'
-import { buttonVariants } from 'src/components/ui/button'
 import { routes } from 'src/utils/constants'
-import { cn } from 'src/utils/utils'
 
 export const metadata = {
   title: 'Create an account',
@@ -12,23 +10,11 @@ export const metadata = {
 
 const Page: React.FC = () => {
   return (
-    <div className="container grid h-screen w-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <Link
-        href={routes.SIGN_IN}
-        className={cn(
-          buttonVariants({ variant: 'ghost' }),
-          'absolute right-4 top-4 md:right-8 md:top-8'
-        )}
-      >
-        Login
-      </Link>
-      <div className="hidden h-full bg-white lg:flex justify-center">
-        <div className="flex flex-col space-y-2 w-2/3 h-full" style={{ background: 'url(/images/logo.svg) no-repeat center center' }}></div>
-      </div>
+    <div className="container grid h-screen w-screen flex-col mt-8">
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col space-y-2 text-center">
-            <div className="flex flex-col space-y-2" style={{ background: 'url(/images/logo.svg) no-repeat center center', height: '100px' }}></div>
+            <div className="flex flex-col space-y-2 mb-6" style={{ background: 'url(/images/logo.svg) no-repeat center center', height: '80px' }}></div>
             <h1 className="text-2xl font-semibold tracking-tight">
               Create an account
             </h1>
