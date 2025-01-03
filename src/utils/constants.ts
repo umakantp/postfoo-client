@@ -13,6 +13,7 @@ export const routes: Record<string, string> = {
 
   // Auth routes protected
   ACCOUNT_PROFILE: '/account/profile',
+  PORTFOLIO: '/portfolio',
 }
 
 // This is list of routes which are not protected. So we don't check for auth.

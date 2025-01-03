@@ -32,3 +32,7 @@ export const signupSchema = z.object({
   message: 'Passwords do not match',
   path: ['confirmPassword'],
 })
+
+export const verifyCodeSchema = z.object({
+  code: z.string().length(6, 'Provide complete OTP code').regex(/^\d+$/, 'OTP must contain only numbers'),
+})

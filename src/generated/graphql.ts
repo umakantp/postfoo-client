@@ -185,6 +185,20 @@ export type SignUpMutationVariables = Exact<{
 
 export type SignUpMutation = { signUp: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean } }
 
+export type VerifyCodeMutationVariables = Exact<{
+  input: VerifyCodeInput,
+}>
+
+
+export type VerifyCodeMutation = { verifyCode: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean } }
+
+export type ResendCodeMutationVariables = Exact<{
+  input: ResendCodeInput,
+}>
+
+
+export type ResendCodeMutation = { resendCode: { error?: ErrorCode | undefined } }
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>
 
 
@@ -269,6 +283,72 @@ export function useSignUpMutation(baseOptions?: Apollo.MutationHookOptions<SignU
 export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>
 export type SignUpMutationResult = Apollo.MutationResult<SignUpMutation>
 export type SignUpMutationOptions = Apollo.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>
+export const VerifyCodeDocument = gql`
+    mutation verifyCode($input: VerifyCodeInput!) {
+  verifyCode(input: $input) {
+    ...MyUserResponse
+  }
+}
+    ${MyUserResponseFragmentDoc}`
+export type VerifyCodeMutationFn = Apollo.MutationFunction<VerifyCodeMutation, VerifyCodeMutationVariables>
+
+/**
+ * __useVerifyCodeMutation__
+ *
+ * To run a mutation, you first call `useVerifyCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyCodeMutation, { data, loading, error }] = useVerifyCodeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useVerifyCodeMutation(baseOptions?: Apollo.MutationHookOptions<VerifyCodeMutation, VerifyCodeMutationVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<VerifyCodeMutation, VerifyCodeMutationVariables>(VerifyCodeDocument, options)
+}
+export type VerifyCodeMutationHookResult = ReturnType<typeof useVerifyCodeMutation>
+export type VerifyCodeMutationResult = Apollo.MutationResult<VerifyCodeMutation>
+export type VerifyCodeMutationOptions = Apollo.BaseMutationOptions<VerifyCodeMutation, VerifyCodeMutationVariables>
+export const ResendCodeDocument = gql`
+    mutation resendCode($input: ResendCodeInput!) {
+  resendCode(input: $input) {
+    error
+  }
+}
+    `
+export type ResendCodeMutationFn = Apollo.MutationFunction<ResendCodeMutation, ResendCodeMutationVariables>
+
+/**
+ * __useResendCodeMutation__
+ *
+ * To run a mutation, you first call `useResendCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResendCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resendCodeMutation, { data, loading, error }] = useResendCodeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useResendCodeMutation(baseOptions?: Apollo.MutationHookOptions<ResendCodeMutation, ResendCodeMutationVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<ResendCodeMutation, ResendCodeMutationVariables>(ResendCodeDocument, options)
+}
+export type ResendCodeMutationHookResult = ReturnType<typeof useResendCodeMutation>
+export type ResendCodeMutationResult = Apollo.MutationResult<ResendCodeMutation>
+export type ResendCodeMutationOptions = Apollo.BaseMutationOptions<ResendCodeMutation, ResendCodeMutationVariables>
 export const MeDocument = gql`
     query me {
   me {

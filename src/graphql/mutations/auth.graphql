@@ -9,3 +9,15 @@ mutation signUp($input: SignUpInput!) {
     ...MyUserResponse
   }
 }
+
+mutation verifyCode($input: VerifyCodeInput!) {
+  verifyCode(input: $input) {
+    ...MyUserResponse
+  }
+}
+
+mutation resendCode($input: ResendCodeInput!) {
+  resendCode(input: $input) {
+    error
+  }
+}
