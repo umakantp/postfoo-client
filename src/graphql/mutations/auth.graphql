@@ -6,13 +6,13 @@ mutation signIn($input: SignInInput!) {
 
 mutation signUp($input: SignUpInput!) {
   signUp(input: $input) {
-    ...MyUserResponse
+    ...GuestUserResponse
   }
 }
 
 mutation verifyCode($input: VerifyCodeInput!) {
   verifyCode(input: $input) {
-    ...MyUserResponse
+    ...GuestUserResponse
   }
 }
 

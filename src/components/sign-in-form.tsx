@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { redirect, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -13,8 +13,8 @@ import { Input } from 'src/components/ui/input'
 import { Label } from 'src/components/ui/label'
 import { PhoneInput } from 'src/components/ui/phone-input'
 import { useSignInMutation } from 'src/generated/graphql'
-import { routes } from 'src/utils/constants'
 import { signinSchema } from 'src/utils/form'
+import { useNavigation } from 'src/utils/history'
 import logger from 'src/utils/logger'
 import { set, storageKeys } from 'src/utils/storage'
 import { toast } from 'src/utils/toast'
@@ -36,6 +36,7 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   })
   const searchParams = useSearchParams()
   const [signIn, { loading: isLoading }] = useSignInMutation({ fetchPolicy: 'no-cache' })
+  const navigate = useNavigation()
 
   async function onSubmit(data: FormData) {
     try {
@@ -51,7 +52,8 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
       if (signInResult.data) {
         const user = signInResult.data.signIn
         set(storageKeys.AUTH_TOKEN, user.token)
-        return redirect(searchParams?.get('from') || routes.HOME)
+        const fromRoute = searchParams?.get('from')
+        return navigate(fromRoute ? fromRoute : 'HOME')
       }
     } catch (error) {
       logger.error(error)

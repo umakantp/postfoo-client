@@ -23,6 +23,8 @@ export default [
       '@stylistic/js/arrow-parens': ['error', 'as-needed', { "requireForBlockBody": true }],
       'require-await': 'error',
       'no-console': 'warn',
+      'no-debugger': 'warn',
+      'no-unused-vars': 'error',
     },
   },
 ]

@@ -45,3 +45,7 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
   }
   return [storedValue, setValue] as const
 }
+
+export const removeTrailingSlash = (path: string) => {
+  return path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path
+}

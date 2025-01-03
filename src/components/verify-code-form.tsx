@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { redirect, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -11,10 +11,9 @@ import { Button, buttonVariants } from 'src/components/ui/button'
 import { Icons } from 'src/components/ui/icons'
 import { InputOTP, InputOTPGroup, InputOTPSlot } from 'src/components/ui/input-otp'
 import { useResendCodeMutation, useVerifyCodeMutation } from 'src/generated/graphql'
-import { routes } from 'src/utils/constants'
 import { verifyCodeSchema } from 'src/utils/form'
+import { useNavigation } from 'src/utils/history'
 import logger from 'src/utils/logger'
-import { set, storageKeys } from 'src/utils/storage'
 import { toast } from 'src/utils/toast'
 import { cn } from 'src/utils/utils'
 
@@ -36,6 +35,7 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   const userId = searchParams.get('userId')
   const [verifyCode, { loading: isLoading }] = useVerifyCodeMutation({ fetchPolicy: 'no-cache' })
   const [resendCode, { loading: isResending }] = useResendCodeMutation({ fetchPolicy: 'no-cache' })
+  const navigate = useNavigation()
 
   const handleResendCode = async () => {
     if (!userId) {
@@ -80,12 +80,11 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
       })
 
       if (verifyCodeResult.data) {
-        const user = verifyCodeResult.data.verifyCode
-        set(storageKeys.AUTH_TOKEN, user.token)
         toast({
-          description: 'Account verified successfully. Taking you to your portfolio.',
+          description: 'Account verified successfully. Taking you for Sign In page.',
+          variant: 'success',
         })
-        return redirect(routes.PORTFOLIO)
+        return navigate('SIGN_IN', {}, {}, true)
       }
     } catch (error) {
       logger.error(error)

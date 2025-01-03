@@ -171,6 +171,8 @@ export type VerifyCodeInput = {
 
 export type MyUserResponseFragment = { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean }
 
+export type GuestUserResponseFragment = { id: string }
+
 export type SignInMutationVariables = Exact<{
   input: SignInInput,
 }>
@@ -183,14 +185,14 @@ export type SignUpMutationVariables = Exact<{
 }>
 
 
-export type SignUpMutation = { signUp: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean } }
+export type SignUpMutation = { signUp: { id: string } }
 
 export type VerifyCodeMutationVariables = Exact<{
   input: VerifyCodeInput,
 }>
 
 
-export type VerifyCodeMutation = { verifyCode: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean } }
+export type VerifyCodeMutation = { verifyCode: { id: string } }
 
 export type ResendCodeMutationVariables = Exact<{
   input: ResendCodeInput,
@@ -215,6 +217,11 @@ export const MyUserResponseFragmentDoc = gql`
   status
   isVerified
   isBlocked
+}
+    `
+export const GuestUserResponseFragmentDoc = gql`
+    fragment GuestUserResponse on User {
+  id
 }
     `
 export const SignInDocument = gql`
@@ -253,10 +260,10 @@ export type SignInMutationOptions = Apollo.BaseMutationOptions<SignInMutation, S
 export const SignUpDocument = gql`
     mutation signUp($input: SignUpInput!) {
   signUp(input: $input) {
-    ...MyUserResponse
+    ...GuestUserResponse
   }
 }
-    ${MyUserResponseFragmentDoc}`
+    ${GuestUserResponseFragmentDoc}`
 export type SignUpMutationFn = Apollo.MutationFunction<SignUpMutation, SignUpMutationVariables>
 
 /**
@@ -286,10 +293,10 @@ export type SignUpMutationOptions = Apollo.BaseMutationOptions<SignUpMutation, S
 export const VerifyCodeDocument = gql`
     mutation verifyCode($input: VerifyCodeInput!) {
   verifyCode(input: $input) {
-    ...MyUserResponse
+    ...GuestUserResponse
   }
 }
-    ${MyUserResponseFragmentDoc}`
+    ${GuestUserResponseFragmentDoc}`
 export type VerifyCodeMutationFn = Apollo.MutationFunction<VerifyCodeMutation, VerifyCodeMutationVariables>
 
 /**

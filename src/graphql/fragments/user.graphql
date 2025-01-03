@@ -9,3 +9,7 @@ fragment MyUserResponse on User {
   isVerified
   isBlocked
 }
+
+fragment GuestUserResponse on User {
+  id
+}

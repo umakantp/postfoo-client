@@ -21,4 +21,5 @@ export const PUBLIC_ROUTES = [
   routes.HOME,
 ]
 
+export type Route = keyof typeof routes
 

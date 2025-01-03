@@ -1,7 +1,6 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { redirect } from 'next/navigation'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -12,8 +11,8 @@ import { Input } from 'src/components/ui/input'
 import { Label } from 'src/components/ui/label'
 import { PhoneInput } from 'src/components/ui/phone-input'
 import { useSignUpMutation } from 'src/generated/graphql'
-import { routes } from 'src/utils/constants'
 import { signupSchema } from 'src/utils/form'
+import { useNavigation } from 'src/utils/history'
 import logger from 'src/utils/logger'
 import { toast } from 'src/utils/toast'
 import { cn } from 'src/utils/utils'
@@ -33,6 +32,7 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
     resolver: zodResolver(signupSchema),
   })
   const [signUp, { loading: isLoading }] = useSignUpMutation({ fetchPolicy: 'no-cache' })
+  const navigate = useNavigation()
 
   async function onSubmit(data: FormData) {
     try {
@@ -49,7 +49,7 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
 
       if (signUpResult.data) {
         const user = signUpResult.data.signUp
-        return redirect(`${routes.VERIFY_ACCOUNT}?userId=${user.id}`)
+        return navigate('VERIFY_ACCOUNT', {}, { userId: user.id }, true)
       }
     } catch (error) {
       logger.error(error)
