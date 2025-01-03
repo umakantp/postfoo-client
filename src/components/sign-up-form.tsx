@@ -14,7 +14,6 @@ import { useSignUpMutation } from 'src/generated/graphql'
 import { signupSchema } from 'src/utils/form'
 import { useNavigation } from 'src/utils/history'
 import logger from 'src/utils/logger'
-import { toast } from 'src/utils/toast'
 import { cn } from 'src/utils/utils'
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -26,6 +25,7 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
     register,
     getValues,
     setValue,
+    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
@@ -51,13 +51,19 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
         const user = signUpResult.data.signUp
         return navigate('VERIFY_ACCOUNT', {}, { userId: user.id }, true)
       }
-    } catch (error) {
-      logger.error(error)
+    } catch (error: any) {
+      if (error.graphQLErrors) {
+        error.graphQLErrors.map((err: any) => {
+          if (err?.extensions?.fieldName) {
+            setError(err.extensions.fieldName, {
+              message: err.message,
+            })
+          }
+        })
+      } else {
+        logger.error(error)
+      }
     }
-    toast({
-      description: 'Something went wrong. Please try again.',
-      variant: 'destructive',
-    })
   }
 
   return (

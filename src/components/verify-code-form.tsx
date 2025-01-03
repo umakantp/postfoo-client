@@ -23,9 +23,9 @@ type FormData = z.infer<typeof verifyCodeSchema>
 
 const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   const {
-    register,
     getValues,
     setValue,
+    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
@@ -86,13 +86,19 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
         })
         return navigate('SIGN_IN', {}, {}, true)
       }
-    } catch (error) {
-      logger.error(error)
+    } catch (error: any) {
+      if (error.graphQLErrors) {
+        error.graphQLErrors.map((err: any) => {
+          if (err?.extensions?.fieldName) {
+            setError(err.extensions.fieldName, {
+              message: err.message,
+            })
+          }
+        })
+      } else {
+        logger.error(error)
+      }
     }
-    toast({
-      description: 'Something went wrong. Please try again.',
-      variant: 'destructive',
-    })
   }
   const [timer, setTimer] = React.useState(60)
 

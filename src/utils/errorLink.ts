@@ -22,6 +22,7 @@ export const errorLink = onError((data) => {
     })
     if (forbidden) {
       hardRedirect(routes.HOME)
+      return
     }
     if (accessDenied) {
       del(storageKeys.AUTH_TOKEN)

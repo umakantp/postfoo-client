@@ -17,7 +17,6 @@ import { signinSchema } from 'src/utils/form'
 import { useNavigation } from 'src/utils/history'
 import logger from 'src/utils/logger'
 import { set, storageKeys } from 'src/utils/storage'
-import { toast } from 'src/utils/toast'
 import { cn } from 'src/utils/utils'
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -29,6 +28,7 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
     register,
     getValues,
     setValue,
+    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
@@ -55,13 +55,19 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
         const fromRoute = searchParams?.get('from')
         return navigate(fromRoute ? fromRoute : 'HOME')
       }
-    } catch (error) {
-      logger.error(error)
+    } catch (error: any) {
+      if (error.graphQLErrors) {
+        error.graphQLErrors.map((err: any) => {
+          if (err?.extensions?.fieldName) {
+            setError(err.extensions.fieldName, {
+              message: err.message,
+            })
+          }
+        })
+      } else {
+        logger.error(error)
+      }
     }
-    toast({
-      description: 'Username or password is incorrect. Please try again.',
-      variant: 'destructive',
-    })
   }
 
   return (
