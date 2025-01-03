@@ -16,11 +16,9 @@ import { useNavigation } from 'src/utils/history'
 import logger from 'src/utils/logger'
 import { cn } from 'src/utils/utils'
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
 type FormData = z.infer<typeof signupSchema>
 
-const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
+const UserAuthForm: React.FC = () => {
   const {
     register,
     getValues,
@@ -67,7 +65,7 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   }
 
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className="grid gap-6">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">

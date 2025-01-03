@@ -17,11 +17,9 @@ import logger from 'src/utils/logger'
 import { toast } from 'src/utils/toast'
 import { cn } from 'src/utils/utils'
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
 type FormData = z.infer<typeof verifyCodeSchema>
 
-const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
+const UserAuthForm: React.FC = () => {
   const {
     getValues,
     setValue,
@@ -110,7 +108,7 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   }, [])
 
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className="grid gap-6">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="flex flex-col gap-1">

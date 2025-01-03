@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { MyUserResponseFragment, useMeQuery } from 'src/generated/graphql'
-import { get, set, storageKeys } from 'src/utils/storage'
+import { del, get, set, storageKeys } from 'src/utils/storage'
 
 const AuthContext = React.createContext<{
   setUser: (user: MyUserResponseFragment | undefined) => void,
@@ -37,7 +37,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const userToken = get<string | undefined>(storageKeys.AUTH_TOKEN)
   const setUserToken = (token: string | undefined) => {
-    set(storageKeys.AUTH_TOKEN, token)
+    if (token) {
+      set(storageKeys.AUTH_TOKEN, token)
+    } else {
+      del(storageKeys.AUTH_TOKEN)
+    }
   }
   const { data, error } = useMeQuery()
 

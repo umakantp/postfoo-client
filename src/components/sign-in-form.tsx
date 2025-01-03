@@ -19,11 +19,9 @@ import logger from 'src/utils/logger'
 import { set, storageKeys } from 'src/utils/storage'
 import { cn } from 'src/utils/utils'
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
 type FormData = z.infer<typeof signinSchema>
 
-const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
+const UserAuthForm: React.FC = () => {
   const {
     register,
     getValues,
@@ -71,7 +69,7 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   }
 
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className="grid gap-6">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
