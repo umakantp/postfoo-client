@@ -8,7 +8,8 @@ const authLink = (token: string | undefined) => (setContext((__, { headers }) =>
     headers: {
       ...headers,
       authorization: token ? `Bearer ${token}` : '',
-      'X-Release': process.env.NEXT_PUBLIC_RELEASE_AT,
+      'X-Release': process.env.NEXT_PUBLIC_RELEASE,
+      'X-Release-At': process.env.NEXT_PUBLIC_RELEASE_AT,
       'X-Mode': process.env.NEXT_PUBLIC_MODE,
       'X-Url': window.location.href,
     },

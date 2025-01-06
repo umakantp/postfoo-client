@@ -1,0 +1,74 @@
+name: deploy main on production
+
+on:
+  workflow_run:
+    workflows: ["merge dev to main"]
+    types: [completed]
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .env file
+        run: |
+          echo "
+          NEXT_PUBLIC_MODE=prod
+          NEXT_PUBLIC_RELEASE=$(git rev-parse --short HEAD)
+          NEXT_PUBLIC_RELEASE_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          NEXT_PUBLIC_GRAPHQLAPI_URL=https://gql.postfoo.com/api
+          " > .env
+          cat .env
+
+      - name: Add environment variables to Github
+        run: |
+          echo "MODE=prod" >> $GITHUB_ENV
+          echo "NODE_ENV=production" >> $GITHUB_ENV
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Stop the Server
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          host: ${{ secrets.POSTFOO_SSH_HOST }}
+          port: ${{ secrets.POSTFOO_SSH_PORT }}
+          username: ${{ secrets.POSTFOO_SSH_USERNAME }}
+          privateKey: ${{ secrets.POSTFOO_SSH_PKEY }}
+          command: cd /root/superman/postfoo-client; pm2 stop superman; pm2 delete superman; mkdir -p /root/superman/postfoo-client
+
+      - name: Deploy to DigitalOcean
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete --checksum
+          remote_path: /root/superman/postfoo-client
+          remote_host: ${{ secrets.POSTFOO_SSH_HOST }}
+          remote_port: ${{ secrets.POSTFOO_SSH_PORT }}
+          remote_user: ${{ secrets.POSTFOO_SSH_USERNAME }}
+          remote_key: ${{ secrets.POSTFOO_SSH_PKEY }}
+
+      - name: Start the Server
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          host: ${{ secrets.POSTFOO_SSH_HOST }}
+          port: ${{ secrets.POSTFOO_SSH_PORT }}
+          username: ${{ secrets.POSTFOO_SSH_USERNAME }}
+          privateKey: ${{ secrets.POSTFOO_SSH_PKEY }}
+          command: cd /root/superman/postfoo-client; pm2 start npm --name "superman" -- start
