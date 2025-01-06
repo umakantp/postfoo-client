@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 import { REGEXP_ONLY_DIGITS } from 'input-otp'
+import Placeholder from 'src/components/placeholder'
 import { Button, buttonVariants } from 'src/components/ui/button'
 import { Icons } from 'src/components/ui/icons'
 import { InputOTP, InputOTPGroup, InputOTPSlot } from 'src/components/ui/input-otp'
@@ -97,46 +98,48 @@ const VerifyCodeForm: React.FC = () => {
   }, [])
 
   return (
-    <div className="grid gap-6">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid gap-2">
-          <div className="flex flex-col gap-1">
-            <InputOTP
-              maxLength={6}
-              pattern={REGEXP_ONLY_DIGITS}
-              value={getValues('code')}
-              onChange={value => setValue('code', value)}
-            >
-              <InputOTPGroup className="m-autox`">
-                <InputOTPSlot index={0} variant="large" />
-                <InputOTPSlot index={1} variant="large" />
-                <InputOTPSlot index={2} variant="large" />
-                <InputOTPSlot index={3} variant="large" />
-                <InputOTPSlot index={4} variant="large" />
-                <InputOTPSlot index={5} variant="large" />
-              </InputOTPGroup>
-            </InputOTP>
-            {errors?.code && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.code.message}
-              </p>
-            )}
+    <React.Suspense fallback={<Placeholder />}>
+      <div className="grid gap-6">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid gap-2">
+            <div className="flex flex-col gap-1">
+              <InputOTP
+                maxLength={6}
+                pattern={REGEXP_ONLY_DIGITS}
+                value={getValues('code')}
+                onChange={value => setValue('code', value)}
+              >
+                <InputOTPGroup className="m-autox`">
+                  <InputOTPSlot index={0} variant="large" />
+                  <InputOTPSlot index={1} variant="large" />
+                  <InputOTPSlot index={2} variant="large" />
+                  <InputOTPSlot index={3} variant="large" />
+                  <InputOTPSlot index={4} variant="large" />
+                  <InputOTPSlot index={5} variant="large" />
+                </InputOTPGroup>
+              </InputOTP>
+              {errors?.code && (
+                <p className="px-1 text-xs text-red-600">
+                  {errors.code.message}
+                </p>
+              )}
+            </div>
+            <button className={cn(buttonVariants())} disabled={isLoading || isResending}>
+              {isLoading && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Verify Code
+            </button>
+            <p className="px-8 text-center text-sm text-muted-foreground">
+              Didn&apos;t receive the code?
+              <Button  disabled={isLoading || isResending || timer > 0} type="button" variant="link" size="sm" className={`${timer === 0 ? 'underline underline-offset-4': ''} pl-1`} onClick={handleResendCode}>
+                {timer > 0 ? `Resend code in ${timer} seconds` : 'Resend code'}
+              </Button>
+            </p>
           </div>
-          <button className={cn(buttonVariants())} disabled={isLoading || isResending}>
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Verify Code
-          </button>
-          <p className="px-8 text-center text-sm text-muted-foreground">
-            Didn&apos;t receive the code?
-            <Button  disabled={isLoading || isResending || timer > 0} type="button" variant="link" size="sm" className={`${timer === 0 ? 'underline underline-offset-4': ''} pl-1`} onClick={handleResendCode}>
-              {timer > 0 ? `Resend code in ${timer} seconds` : 'Resend code'}
-            </Button>
-          </p>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </React.Suspense>
   )
 }
 
