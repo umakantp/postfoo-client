@@ -15,7 +15,7 @@ const Page: React.FC = () => {
     setTimeout(() => {
       // Let give it a time, so user see the feedback of something happening.
       // Hard refresh refreshes the page i.e. removes any local state.
-      hardRedirect(routes.SIGNIN)
+      hardRedirect(routes.SIGN_IN)
     }, 3000)
   }, [])
   return (
