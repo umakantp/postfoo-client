@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import * as React from 'react'
+import Placeholder from 'src/components/placeholder'
 import VerifyCodeForm from 'src/components/verify-code-form'
 
 export const metadata: Metadata = {
@@ -20,7 +21,9 @@ const Page: React.FC = () => {
             We've sent a OTP code to your mobile number. Enter the code below to verify your identity.
           </p>
         </div>
-        <VerifyCodeForm />
+        <React.Suspense fallback={<Placeholder />}>
+          <VerifyCodeForm />
+        </React.Suspense>
       </div>
     </div>
   )

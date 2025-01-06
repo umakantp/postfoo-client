@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import * as React from 'react'
+import Placeholder from 'src/components/placeholder'
 import SignInForm from 'src/components/sign-in-form'
 import { routes } from 'src/utils/constants'
 
@@ -22,7 +23,9 @@ const Page: React.FC = () => {
             Login to your PostFoo account
           </p>
         </div>
-        <SignInForm />
+        <React.Suspense fallback={<Placeholder />}>
+          <SignInForm />
+        </React.Suspense>
         <p className="px-8 text-center text-sm text-muted-foreground">
           Don&apos;t have an account? <Link
             href={routes.SIGN_UP}
