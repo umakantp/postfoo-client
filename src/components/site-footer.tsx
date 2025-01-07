@@ -27,14 +27,22 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
             >
               Shadcn Taxonomy
             </a>
-            . Open source and available on{' '}
+            . Open source and available on Github @ {' '}
             <a
               href="https://github.com/umakantp/postfoo-client"
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
             >
-              GitHub
+              postfoo-client
+            </a> and {' '}
+            <a
+              href="https://github.com/umakantp/postfoo-server"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium underline underline-offset-4"
+            >
+              postfoo-server
             </a>
             .
           </p>
