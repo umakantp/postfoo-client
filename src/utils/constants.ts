@@ -3,6 +3,7 @@ export const routes: Record<string, string> = {
   HOME: '/',
   TERMS_OF_SERVICE: '/content/terms-of-service',
   PRIVACY_POLICY: '/content/privacy-policy',
+  COOKIE_POLICY: '/content/cookie-policy',
   PRICING: '/pricing',
 
   // Auth routes but not protected
