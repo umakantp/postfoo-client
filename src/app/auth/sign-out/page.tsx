@@ -7,14 +7,13 @@ import { routes } from 'src/utils/constants'
 import { hardRedirect } from 'src/utils/history'
 
 const Page: React.FC = () => {
-  const auth = useAuth()
+  const { setUser } = useAuth()
 
   React.useEffect(() => {
-    auth.setUserToken(undefined)
-    auth.setUser(undefined)
     setTimeout(() => {
       // Let give it a time, so user see the feedback of something happening.
       // Hard refresh refreshes the page i.e. removes any local state.
+      setUser(undefined)
       hardRedirect(routes.SIGN_IN)
     }, 3000)
   }, [])

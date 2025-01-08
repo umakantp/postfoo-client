@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 import { isEmpty } from 'lodash'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { stringify } from 'querystring'
 import * as React from 'react'
 import { Route, routes } from 'src/utils/constants'
@@ -100,4 +100,46 @@ export const useNavigation = () => {
     }
   }, [push, replace])
 }
+
+const matchesPathname = (asPath: string, pathname: string) => {
+  if (asPath === pathname) {
+    return true
+  }
+  const baseAsPath = removeTrailingSlash(asPath.split('?')[0] as string)
+  const basePathname = removeTrailingSlash(pathname.split('?')[0] as string)
+  if (baseAsPath === basePathname) {
+    return true
+  }
+  const basePathRegex = new RegExp(
+    `^${basePathname.replace(/(\[[a-zA-Z0-9-]+\])+/g, '[a-zA-Z0-9-]+')}$`
+      .replace(/\[\[\.\.\.[a-zA-Z0-9-]+\]\]/g, '?.*')
+      .replace(/\[\.\.\.[a-zA-Z0-9-]+\]/g, '.*'),
+  )
+  if (basePathRegex.test(baseAsPath)) {
+    return true
+  }
+  return false
+}
+
+export const useMatchedRoute = () => {
+  const pathname = usePathname()
+  for (const routeKey of Object.keys(routes)) {
+    const r = routes[routeKey] as string
+    if (pathname && matchesPathname(pathname, r)) {
+      return r
+    }
+  }
+  return ''
+}
+
+export const useIsHrefActive = () => {
+  const activePath = useMatchedRoute()
+  return (href: string) => {
+    // Matches it to the route pattern like /portfolio/[portfolioId]/users
+    const regExpPattern = new RegExp(`^${activePath.replace(/\[.*?\]/g, '[^/]+')}$`)
+    // Check if the href matches the active pattern
+    return regExpPattern.test(href)
+  }
+}
+
 

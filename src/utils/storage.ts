@@ -25,3 +25,10 @@ export const del = (key: string) => {
   } catch {
   }
 }
+
+export const clear = () => {
+  try {
+    localStorage.clear
+  } catch {
+  }
+}

@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 import Link from 'next/link'
+import { useAuth } from 'src/components/auth-provider'
 import { buttonVariants } from 'src/components/ui/button'
 import { Icons } from 'src/components/ui/icons'
 import { Input } from 'src/components/ui/input'
@@ -17,7 +18,6 @@ import { routes } from 'src/utils/constants'
 import { signinSchema } from 'src/utils/form'
 import { useNavigation } from 'src/utils/history'
 import logger from 'src/utils/logger'
-import { set, storageKeys } from 'src/utils/storage'
 import { cn } from 'src/utils/utils'
 
 type FormData = z.infer<typeof signinSchema>
@@ -33,6 +33,7 @@ const SignInForm: React.FC = () => {
   } = useForm<FormData>({
     resolver: zodResolver(signinSchema),
   })
+  const { setUser } = useAuth()
   const searchParams = useSearchParams()
   const [signIn, { loading: isLoading }] = useSignInMutation({ fetchPolicy: 'no-cache' })
   const navigate = useNavigation()
@@ -50,7 +51,7 @@ const SignInForm: React.FC = () => {
 
       if (signInResult.data) {
         const user = signInResult.data.signIn
-        set(storageKeys.AUTH_TOKEN, user.token)
+        setUser(user)
         const fromRoute = searchParams?.get('from')
         return navigate(fromRoute ? fromRoute : 'HOME')
       }

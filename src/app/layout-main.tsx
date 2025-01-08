@@ -1,6 +1,6 @@
 import { usePathname } from 'next/navigation'
 import * as React from 'react'
-import MainNav from 'src/components/navigation/main-nav'
+import MainNav from 'src/components/navigation/navigation-main'
 import { SiteFooter } from 'src/components/site-footer'
 
 interface LayoutMainProps {

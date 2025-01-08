@@ -2,17 +2,15 @@
 
 import * as React from 'react'
 import { MyUserResponseFragment, useMeQuery } from 'src/generated/graphql'
-import { del, get, set, storageKeys } from 'src/utils/storage'
+import { clear, del, get, set, storageKeys } from 'src/utils/storage'
 
 const AuthContext = React.createContext<{
   setUser: (user: MyUserResponseFragment | undefined) => void,
   user: MyUserResponseFragment | undefined,
-  setUserToken: (userToken: string | undefined) => void,
   isLoading: boolean,
 }>({
       setUser: (_user: MyUserResponseFragment | undefined) => undefined,
       user: undefined,
-      setUserToken: (_token: string | undefined) => undefined,
       isLoading: true,
     })
 
@@ -43,6 +41,14 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       del(storageKeys.AUTH_TOKEN)
     }
   }
+  const setUserWrapper = (user: MyUserResponseFragment | undefined) => {
+    setUser(user)
+    setUserToken(user?.token)
+    if (!user) {
+      // Removing user, lets clear all local storage.
+      clear()
+    }
+  }
   const { data, error } = useMeQuery()
 
   React.useEffect(() => {
@@ -52,16 +58,14 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // User is not loaded from token, lets do it.
         if (data.me) {
           setUser(data.me)
-          // update fresh token
-          setUserToken(data.me.token)
         } else {
           // remove old token, it might be broken or old expired one.
-          setUserToken(undefined)
+          setUser(undefined)
         }
         setIsLoading(false)
       } else if (error) {
         // Some error
-        setUserToken(undefined)
+        setUser(undefined)
         setIsLoading(false)
       } else {
         // User is loaded, lets stop loading.
@@ -77,8 +81,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
-        setUser,
-        setUserToken,
+        setUser: setUserWrapper,
         isLoading,
       }}
     >
