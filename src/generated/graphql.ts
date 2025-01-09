@@ -22,7 +22,6 @@ export type Scalars = {
   DateTime: { input: string, output: string },
   EmailAddress: { input: string, output: string },
   JWT: { input: string, output: string },
-  NonEmptyString: { input: string, output: string },
   PhoneNumber: { input: string, output: string },
   URL: { input: string, output: string },
   Void: { input: void, output: void },
@@ -30,14 +29,49 @@ export type Scalars = {
 
 export type Code = Node & {
   /**  The OTP code that was sent to the user  */
-  code: Scalars['NonEmptyString']['output'],
+  code: Scalars['ID']['output'],
   createdAt: Scalars['DateTime']['output'],
   /**  When the code expires if set  */
   expireAt?: Maybe<Scalars['DateTime']['output']>,
-  id: Scalars['NonEmptyString']['output'],
+  id: Scalars['ID']['output'],
   updatedAt: Scalars['DateTime']['output'],
   /**  The user that this code is for  */
-  userId: Scalars['NonEmptyString']['output'],
+  user: User,
+}
+
+export type CreateFundInput = {
+  category?: InputMaybe<FundCategory>,
+  description?: InputMaybe<Scalars['String']['input']>,
+  lastNav: Scalars['Float']['input'],
+  name: Scalars['String']['input'],
+  plan: FundPlan,
+  symbol1?: InputMaybe<Scalars['String']['input']>,
+  symbol2?: InputMaybe<Scalars['String']['input']>,
+  type?: InputMaybe<FundType>,
+}
+
+export type CreatePortfolioFundInput = {
+  cost: Scalars['Float']['input'],
+  fundId: Scalars['ID']['input'],
+  portfolioId: Scalars['ID']['input'],
+  units: Scalars['Float']['input'],
+}
+
+export type CreatePortfolioInput = {
+  description?: InputMaybe<Scalars['String']['input']>,
+  name: Scalars['String']['input'],
+}
+
+export type DeleteFundInput = {
+  fundId: Scalars['ID']['input'],
+}
+
+export type DeletePortfolioFundInput = {
+  portfolioFundId: Scalars['ID']['input'],
+}
+
+export type DeletePortfolioInput = {
+  portfolioId: Scalars['ID']['input'],
 }
 
 /**  Error codes  */
@@ -60,13 +94,177 @@ export type ForgotPasswordInput = {
   mobile: Scalars['PhoneNumber']['input'],
 }
 
+export type Fund = Node & {
+  /**  Hybrid or Equity or Debt or FOF  */
+  category?: Maybe<FundCategory>,
+  createdAt: Scalars['DateTime']['output'],
+  description?: Maybe<Scalars['String']['output']>,
+  id: Scalars['ID']['output'],
+  lastNav: Scalars['Float']['output'],
+  name: Scalars['String']['output'],
+  /**  Direct or Regular  */
+  plan?: Maybe<FundPlan>,
+  /**  Store google finance symbol  */
+  symbol1?: Maybe<Scalars['String']['output']>,
+  /**  Any other external symbol for future  */
+  symbol2?: Maybe<Scalars['String']['output']>,
+  /**  Growth or IDCW  */
+  type?: Maybe<FundType>,
+  updatedAt: Scalars['DateTime']['output'],
+}
+
+export enum FundCategory {
+  CHILDRENS_FUND = 'CHILDRENS_FUND',
+  DEBT_BANKING_AND_PSU = 'DEBT_BANKING_AND_PSU',
+  DEBT_CORPORATE_BOND = 'DEBT_CORPORATE_BOND',
+  DEBT_CREDIT_RISK = 'DEBT_CREDIT_RISK',
+  DEBT_DYNAMIC_BOND = 'DEBT_DYNAMIC_BOND',
+  DEBT_FLOATER = 'DEBT_FLOATER',
+  DEBT_GILT = 'DEBT_GILT',
+  DEBT_GILT_10_YEARS_CONSTANT = 'DEBT_GILT_10_YEARS_CONSTANT',
+  DEBT_LIQUID = 'DEBT_LIQUID',
+  DEBT_LONG_DURATION = 'DEBT_LONG_DURATION',
+  DEBT_LOW_DURATION = 'DEBT_LOW_DURATION',
+  DEBT_MEDIUM_DURATION = 'DEBT_MEDIUM_DURATION',
+  DEBT_MEDIUM_TO_LONG_DURATION = 'DEBT_MEDIUM_TO_LONG_DURATION',
+  DEBT_MONEY_MARKET = 'DEBT_MONEY_MARKET',
+  DEBT_OVERNIGHT = 'DEBT_OVERNIGHT',
+  DEBT_SHORT_DURATION = 'DEBT_SHORT_DURATION',
+  DEBT_ULTRA_SHORT_DURATION = 'DEBT_ULTRA_SHORT_DURATION',
+  EQUITY_BANKING_AND_FINANCIAL_SERVICES = 'EQUITY_BANKING_AND_FINANCIAL_SERVICES',
+  EQUITY_DIVIDEND_YIELD = 'EQUITY_DIVIDEND_YIELD',
+  EQUITY_ELSS = 'EQUITY_ELSS',
+  EQUITY_FLEXI_CAP = 'EQUITY_FLEXI_CAP',
+  EQUITY_FOCUSED = 'EQUITY_FOCUSED',
+  EQUITY_LARGE_AND_MID_CAP = 'EQUITY_LARGE_AND_MID_CAP',
+  EQUITY_LARGE_CAP = 'EQUITY_LARGE_CAP',
+  EQUITY_MID_CAP = 'EQUITY_MID_CAP',
+  EQUITY_MULTI_CAP = 'EQUITY_MULTI_CAP',
+  EQUITY_SECTORAL_INFRASTRUCTURE = 'EQUITY_SECTORAL_INFRASTRUCTURE',
+  EQUITY_SECTORAL_PHARMA_AND_HEALTHCARE = 'EQUITY_SECTORAL_PHARMA_AND_HEALTHCARE',
+  EQUITY_SECTORAL_TECHNOLOGY = 'EQUITY_SECTORAL_TECHNOLOGY',
+  EQUITY_SMALL_CAP = 'EQUITY_SMALL_CAP',
+  EQUITY_THEMATIC_CONSUMPTION = 'EQUITY_THEMATIC_CONSUMPTION',
+  EQUITY_THEMATIC_ESG = 'EQUITY_THEMATIC_ESG',
+  EQUITY_THEMATIC_INTERNATIONAL = 'EQUITY_THEMATIC_INTERNATIONAL',
+  EQUITY_THEMATIC_MANUFACTURING = 'EQUITY_THEMATIC_MANUFACTURING',
+  EQUITY_THEMATIC_MNC = 'EQUITY_THEMATIC_MNC',
+  EQUITY_THEMATIC_OTHERS = 'EQUITY_THEMATIC_OTHERS',
+  EQUITY_THEMATIC_PSU = 'EQUITY_THEMATIC_PSU',
+  EQUITY_THEMATIC_QUANTITATIVE = 'EQUITY_THEMATIC_QUANTITATIVE',
+  EQUITY_THEMATIC_TRANSPORTATION = 'EQUITY_THEMATIC_TRANSPORTATION',
+  EQUITY_VALUE = 'EQUITY_VALUE',
+  ETF = 'ETF',
+  FOF_DOMESTIC_DEBT = 'FOF_DOMESTIC_DEBT',
+  FOF_DOMESTIC_EQUITY = 'FOF_DOMESTIC_EQUITY',
+  FOF_DOMESTIC_GOLD = 'FOF_DOMESTIC_GOLD',
+  FOF_DOMESTIC_HYBRID = 'FOF_DOMESTIC_HYBRID',
+  FOF_DOMESTIC_SILVER = 'FOF_DOMESTIC_SILVER',
+  FOF_OVERSEAS = 'FOF_OVERSEAS',
+  HYBRID_AGGRESSIVE = 'HYBRID_AGGRESSIVE',
+  HYBRID_ARBITRAGE = 'HYBRID_ARBITRAGE',
+  HYBRID_CONSERVATIVE = 'HYBRID_CONSERVATIVE',
+  HYBRID_DYNAMIC_ASSET_ALLOCATION = 'HYBRID_DYNAMIC_ASSET_ALLOCATION',
+  HYBRID_EQUITY_SAVINGS = 'HYBRID_EQUITY_SAVINGS',
+  HYBRID_MULTI_ASSET_ALLOCATION = 'HYBRID_MULTI_ASSET_ALLOCATION',
+  INDEX_FUND = 'INDEX_FUND',
+  RETIREMENT_FUND = 'RETIREMENT_FUND'
+}
+
+export enum FundPlan {
+  Direct = 'Direct',
+  Regular = 'Regular'
+}
+
+export enum FundType {
+  BONUS = 'BONUS',
+  GROWTH = 'GROWTH',
+  IDCW = 'IDCW',
+  IDCW_DAILY_PAYOUT = 'IDCW_DAILY_PAYOUT',
+  IDCW_DAILY_REINVESTMENT = 'IDCW_DAILY_REINVESTMENT',
+  IDCW_HALFYEARLY_PAYOUT = 'IDCW_HALFYEARLY_PAYOUT',
+  IDCW_HALFYEARLY_REINVESTMENT = 'IDCW_HALFYEARLY_REINVESTMENT',
+  IDCW_MONTHLY_PAYOUT = 'IDCW_MONTHLY_PAYOUT',
+  IDCW_MONTHLY_REINVESTMENT = 'IDCW_MONTHLY_REINVESTMENT',
+  IDCW_PAYOUT = 'IDCW_PAYOUT',
+  IDCW_QUARTERLY_PAYOUT = 'IDCW_QUARTERLY_PAYOUT',
+  IDCW_QUARTERLY_REINVESTMENT = 'IDCW_QUARTERLY_REINVESTMENT',
+  IDCW_REINVESTMENT = 'IDCW_REINVESTMENT',
+  IDCW_WEEKLY_PAYOUT = 'IDCW_WEEKLY_PAYOUT',
+  IDCW_WEEKLY_REINVESTMENT = 'IDCW_WEEKLY_REINVESTMENT',
+  IDCW_YEARLY_PAYOUT = 'IDCW_YEARLY_PAYOUT',
+  IDCW_YEARLY_REINVESTMENT = 'IDCW_YEARLY_REINVESTMENT'
+}
+
+export type FundsInput = {
+  category?: InputMaybe<FundCategory>,
+  page?: InputMaybe<PageInput>,
+  plan?: InputMaybe<FundPlan>,
+  search?: InputMaybe<Scalars['String']['input']>,
+  type?: InputMaybe<FundType>,
+}
+
+export type FundsPayload = PagePayload & {
+  nodes: Array<Fund>,
+  pageInfo: PageInfo,
+  total: Scalars['Int']['output'],
+}
+
+export type Membership = Node & {
+  createdAt: Scalars['DateTime']['output'],
+  id: Scalars['ID']['output'],
+  portfolio: Portfolio,
+  role: UserRole,
+  updatedAt: Scalars['DateTime']['output'],
+  user: User,
+}
+
 export type Mutation = {
+  createFund: Fund,
+  createPortfolio: Portfolio,
+  createPortfolioFund: PortfolioFund,
+  deleteFund: SuccessPayload,
+  deletePortfolio: SuccessPayload,
+  deletePortfolioFund: SuccessPayload,
   forgotPassword: SuccessPayload,
   resendCode: SuccessPayload,
   resetPassword: SuccessPayload,
   signIn: User,
   signUp: User,
+  updateFund: Fund,
+  updatePortfolio: Portfolio,
+  updatePortfolioFund: PortfolioFund,
   verifyCode: SuccessPayload,
+}
+
+
+export type MutationCreateFundArgs = {
+  input: CreateFundInput,
+}
+
+
+export type MutationCreatePortfolioArgs = {
+  input: CreatePortfolioInput,
+}
+
+
+export type MutationCreatePortfolioFundArgs = {
+  input: CreatePortfolioFundInput,
+}
+
+
+export type MutationDeleteFundArgs = {
+  input: DeleteFundInput,
+}
+
+
+export type MutationDeletePortfolioArgs = {
+  input: DeletePortfolioInput,
+}
+
+
+export type MutationDeletePortfolioFundArgs = {
+  input: DeletePortfolioFundInput,
 }
 
 
@@ -95,13 +293,28 @@ export type MutationSignUpArgs = {
 }
 
 
+export type MutationUpdateFundArgs = {
+  input: UpdateFundInput,
+}
+
+
+export type MutationUpdatePortfolioArgs = {
+  input: UpdatePortfolioInput,
+}
+
+
+export type MutationUpdatePortfolioFundArgs = {
+  input: UpdatePortfolioFundInput,
+}
+
+
 export type MutationVerifyCodeArgs = {
   input: VerifyCodeInput,
 }
 
 export type Node = {
   createdAt: Scalars['DateTime']['output'],
-  id: Scalars['NonEmptyString']['output'],
+  id: Scalars['ID']['output'],
   updatedAt: Scalars['DateTime']['output'],
 }
 
@@ -123,9 +336,51 @@ export type PageInput = {
   offset?: InputMaybe<Scalars['Int']['input']>,
 }
 
+export type PagePayload = {
+  nodes: Array<Node>,
+  pageInfo: PageInfo,
+  total: Scalars['Int']['output'],
+}
+
+export type Portfolio = Node & {
+  createdAt: Scalars['DateTime']['output'],
+  description?: Maybe<Scalars['String']['output']>,
+  funds: Array<PortfolioFund>,
+  id: Scalars['ID']['output'],
+  members: Array<Membership>,
+  name: Scalars['String']['output'],
+  updatedAt: Scalars['DateTime']['output'],
+}
+
+export type PortfolioFund = Node & {
+  cost: Scalars['Float']['output'],
+  createdAt: Scalars['DateTime']['output'],
+  fund: Fund,
+  id: Scalars['ID']['output'],
+  portfolio: Portfolio,
+  units: Scalars['Float']['output'],
+  updatedAt: Scalars['DateTime']['output'],
+}
+
+export type PortfolioFundsInput = {
+  page?: InputMaybe<PageInput>,
+  portfolioId: Scalars['ID']['input'],
+}
+
+export type PortfolioFundsPayload = PagePayload & {
+  nodes: Array<PortfolioFund>,
+  pageInfo: PageInfo,
+  total: Scalars['Int']['output'],
+}
+
 export type Query = {
   add?: Maybe<Scalars['Int']['output']>,
+  fund: Fund,
+  funds: FundsPayload,
   me?: Maybe<User>,
+  portfolio: Portfolio,
+  portfolioFund: PortfolioFund,
+  portfolioFunds: PortfolioFundsPayload,
 }
 
 
@@ -134,50 +389,105 @@ export type QueryAddArgs = {
   y?: InputMaybe<Scalars['Int']['input']>,
 }
 
+
+export type QueryFundArgs = {
+  fundId: Scalars['ID']['input'],
+}
+
+
+export type QueryFundsArgs = {
+  input: FundsInput,
+}
+
+
+export type QueryPortfolioArgs = {
+  portfolioId: Scalars['ID']['input'],
+}
+
+
+export type QueryPortfolioFundArgs = {
+  portfolioFundId: Scalars['ID']['input'],
+}
+
+
+export type QueryPortfolioFundsArgs = {
+  input: PortfolioFundsInput,
+}
+
 export type ResendCodeInput = {
   mobile?: InputMaybe<Scalars['PhoneNumber']['input']>,
-  userId?: InputMaybe<Scalars['NonEmptyString']['input']>,
+  userId?: InputMaybe<Scalars['ID']['input']>,
 }
 
 export type ResetPasswordInput = {
-  code: Scalars['NonEmptyString']['input'],
+  code: Scalars['ID']['input'],
   mobile: Scalars['PhoneNumber']['input'],
-  password: Scalars['NonEmptyString']['input'],
+  password: Scalars['ID']['input'],
 }
 
 export type SignInInput = {
   mobile: Scalars['PhoneNumber']['input'],
-  password: Scalars['NonEmptyString']['input'],
+  password: Scalars['ID']['input'],
 }
 
 export type SignUpInput = {
-  firstName: Scalars['NonEmptyString']['input'],
-  lastName?: InputMaybe<Scalars['NonEmptyString']['input']>,
+  firstName: Scalars['ID']['input'],
+  lastName?: InputMaybe<Scalars['ID']['input']>,
   mobile: Scalars['PhoneNumber']['input'],
-  password: Scalars['NonEmptyString']['input'],
+  password: Scalars['ID']['input'],
 }
 
 export type SuccessPayload = {
   error?: Maybe<ErrorCode>,
 }
 
+export type UpdateFundInput = {
+  category?: InputMaybe<FundCategory>,
+  description?: InputMaybe<Scalars['String']['input']>,
+  fundId: Scalars['ID']['input'],
+  lastNav: Scalars['Float']['input'],
+  name?: InputMaybe<Scalars['String']['input']>,
+  plan?: InputMaybe<FundPlan>,
+  symbol1?: InputMaybe<Scalars['String']['input']>,
+  symbol2?: InputMaybe<Scalars['String']['input']>,
+  type?: InputMaybe<FundType>,
+}
+
+export type UpdatePortfolioFundInput = {
+  cost?: InputMaybe<Scalars['Float']['input']>,
+  portfolioFundId: Scalars['ID']['input'],
+  units?: InputMaybe<Scalars['Float']['input']>,
+}
+
+export type UpdatePortfolioInput = {
+  description?: InputMaybe<Scalars['String']['input']>,
+  name?: InputMaybe<Scalars['String']['input']>,
+  portfolioId: Scalars['ID']['input'],
+}
+
 export type User = Node & {
   codes: Array<Code>,
   createdAt: Scalars['DateTime']['output'],
-  firstName: Scalars['NonEmptyString']['output'],
-  id: Scalars['NonEmptyString']['output'],
+  firstName: Scalars['ID']['output'],
+  id: Scalars['ID']['output'],
   isBlocked: Scalars['Boolean']['output'],
   isVerified: Scalars['Boolean']['output'],
-  lastName?: Maybe<Scalars['NonEmptyString']['output']>,
+  lastName?: Maybe<Scalars['ID']['output']>,
+  memberships: Array<Membership>,
   mobile: Scalars['PhoneNumber']['output'],
   /**  The generated full (first+last) name  */
-  name: Scalars['NonEmptyString']['output'],
-  password: Scalars['NonEmptyString']['output'],
-  salt: Scalars['NonEmptyString']['output'],
+  name: Scalars['ID']['output'],
+  password: Scalars['ID']['output'],
+  salt: Scalars['ID']['output'],
   status: UserStatus,
   /**  A fresh JWT for the user  */
   token: Scalars['JWT']['output'],
   updatedAt: Scalars['DateTime']['output'],
+}
+
+export enum UserRole {
+  Admin = 'Admin',
+  Member = 'Member'
 }
 
 export enum UserStatus {
@@ -186,12 +496,16 @@ export enum UserStatus {
 }
 
 export type VerifyCodeInput = {
-  code: Scalars['NonEmptyString']['input'],
+  code: Scalars['ID']['input'],
   mobile?: InputMaybe<Scalars['PhoneNumber']['input']>,
-  userId?: InputMaybe<Scalars['NonEmptyString']['input']>,
+  userId?: InputMaybe<Scalars['ID']['input']>,
 }
 
-export type MyUserResponseFragment = { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean }
+export type PageInfoResponseFragment = { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined }
+
+export type PortfolioResponseFragment = { id: string, name: string, description?: string | undefined }
+
+export type MyUserResponseFragment = { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean, memberships: Array<{ id: string, role: UserRole, portfolio: { id: string, name: string } }> }
 
 export type GuestUserResponseFragment = { id: string }
 
@@ -200,7 +514,7 @@ export type SignInMutationVariables = Exact<{
 }>
 
 
-export type SignInMutation = { signIn: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean } }
+export type SignInMutation = { signIn: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean, memberships: Array<{ id: string, role: UserRole, portfolio: { id: string, name: string } }> } }
 
 export type SignUpMutationVariables = Exact<{
   input: SignUpInput,
@@ -237,11 +551,40 @@ export type ResetPasswordMutationVariables = Exact<{
 
 export type ResetPasswordMutation = { resetPassword: { error?: ErrorCode | undefined } }
 
+export type CreatePortfolioMutationVariables = Exact<{
+  input: CreatePortfolioInput,
+}>
+
+
+export type CreatePortfolioMutation = { createPortfolio: { id: string } }
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>
 
 
-export type MeQuery = { me?: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean } | undefined }
+export type MeQuery = { me?: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean, memberships: Array<{ id: string, role: UserRole, portfolio: { id: string, name: string } }> } | undefined }
 
+export type PortfolioQueryVariables = Exact<{
+  portfolioId: Scalars['ID']['input'],
+}>
+
+
+export type PortfolioQuery = { portfolio: { id: string, name: string, description?: string | undefined } }
+
+export const PageInfoResponseFragmentDoc = gql`
+    fragment PageInfoResponse on PageInfo {
+  hasNextPage
+  hasPreviousPage
+  startCursor
+  endCursor
+}
+    `
+export const PortfolioResponseFragmentDoc = gql`
+    fragment PortfolioResponse on Portfolio {
+  id
+  name
+  description
+}
+    `
 export const MyUserResponseFragmentDoc = gql`
     fragment MyUserResponse on User {
   id
@@ -253,6 +596,14 @@ export const MyUserResponseFragmentDoc = gql`
   status
   isVerified
   isBlocked
+  memberships {
+    id
+    role
+    portfolio {
+      id
+      name
+    }
+  }
 }
     `
 export const GuestUserResponseFragmentDoc = gql`
@@ -458,6 +809,39 @@ export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOption
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>
 export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>
+export const CreatePortfolioDocument = gql`
+    mutation CreatePortfolio($input: CreatePortfolioInput!) {
+  createPortfolio(input: $input) {
+    id
+  }
+}
+    `
+export type CreatePortfolioMutationFn = Apollo.MutationFunction<CreatePortfolioMutation, CreatePortfolioMutationVariables>
+
+/**
+ * __useCreatePortfolioMutation__
+ *
+ * To run a mutation, you first call `useCreatePortfolioMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePortfolioMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPortfolioMutation, { data, loading, error }] = useCreatePortfolioMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePortfolioMutation(baseOptions?: Apollo.MutationHookOptions<CreatePortfolioMutation, CreatePortfolioMutationVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreatePortfolioMutation, CreatePortfolioMutationVariables>(CreatePortfolioDocument, options)
+}
+export type CreatePortfolioMutationHookResult = ReturnType<typeof useCreatePortfolioMutation>
+export type CreatePortfolioMutationResult = Apollo.MutationResult<CreatePortfolioMutation>
+export type CreatePortfolioMutationOptions = Apollo.BaseMutationOptions<CreatePortfolioMutation, CreatePortfolioMutationVariables>
 export const MeDocument = gql`
     query me {
   me {
@@ -497,22 +881,100 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>
 export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>
-export type CodeKeySpecifier = ('code' | 'createdAt' | 'expireAt' | 'id' | 'updatedAt' | 'userId' | CodeKeySpecifier)[]
+export const PortfolioDocument = gql`
+    query portfolio($portfolioId: ID!) {
+  portfolio(portfolioId: $portfolioId) {
+    ...PortfolioResponse
+  }
+}
+    ${PortfolioResponseFragmentDoc}`
+
+/**
+ * __usePortfolioQuery__
+ *
+ * To run a query within a React component, call `usePortfolioQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePortfolioQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePortfolioQuery({
+ *   variables: {
+ *      portfolioId: // value for 'portfolioId'
+ *   },
+ * });
+ */
+export function usePortfolioQuery(baseOptions: Apollo.QueryHookOptions<PortfolioQuery, PortfolioQueryVariables> & ({ variables: PortfolioQueryVariables, skip?: boolean } | { skip: boolean }) ) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<PortfolioQuery, PortfolioQueryVariables>(PortfolioDocument, options)
+}
+export function usePortfolioLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PortfolioQuery, PortfolioQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<PortfolioQuery, PortfolioQueryVariables>(PortfolioDocument, options)
+}
+export function usePortfolioSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PortfolioQuery, PortfolioQueryVariables>) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+  return Apollo.useSuspenseQuery<PortfolioQuery, PortfolioQueryVariables>(PortfolioDocument, options)
+}
+export type PortfolioQueryHookResult = ReturnType<typeof usePortfolioQuery>
+export type PortfolioLazyQueryHookResult = ReturnType<typeof usePortfolioLazyQuery>
+export type PortfolioSuspenseQueryHookResult = ReturnType<typeof usePortfolioSuspenseQuery>
+export type PortfolioQueryResult = Apollo.QueryResult<PortfolioQuery, PortfolioQueryVariables>
+export type CodeKeySpecifier = ('code' | 'createdAt' | 'expireAt' | 'id' | 'updatedAt' | 'user' | CodeKeySpecifier)[]
 export type CodeFieldPolicy = {
   code?: FieldPolicy<any> | FieldReadFunction<any>,
   createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
   expireAt?: FieldPolicy<any> | FieldReadFunction<any>,
   id?: FieldPolicy<any> | FieldReadFunction<any>,
   updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
-  userId?: FieldPolicy<any> | FieldReadFunction<any>,
+  user?: FieldPolicy<any> | FieldReadFunction<any>,
 }
-export type MutationKeySpecifier = ('forgotPassword' | 'resendCode' | 'resetPassword' | 'signIn' | 'signUp' | 'verifyCode' | MutationKeySpecifier)[]
+export type FundKeySpecifier = ('category' | 'createdAt' | 'description' | 'id' | 'lastNav' | 'name' | 'plan' | 'symbol1' | 'symbol2' | 'type' | 'updatedAt' | FundKeySpecifier)[]
+export type FundFieldPolicy = {
+  category?: FieldPolicy<any> | FieldReadFunction<any>,
+  createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+  description?: FieldPolicy<any> | FieldReadFunction<any>,
+  id?: FieldPolicy<any> | FieldReadFunction<any>,
+  lastNav?: FieldPolicy<any> | FieldReadFunction<any>,
+  name?: FieldPolicy<any> | FieldReadFunction<any>,
+  plan?: FieldPolicy<any> | FieldReadFunction<any>,
+  symbol1?: FieldPolicy<any> | FieldReadFunction<any>,
+  symbol2?: FieldPolicy<any> | FieldReadFunction<any>,
+  type?: FieldPolicy<any> | FieldReadFunction<any>,
+  updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+}
+export type FundsPayloadKeySpecifier = ('nodes' | 'pageInfo' | 'total' | FundsPayloadKeySpecifier)[]
+export type FundsPayloadFieldPolicy = {
+  nodes?: FieldPolicy<any> | FieldReadFunction<any>,
+  pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
+  total?: FieldPolicy<any> | FieldReadFunction<any>,
+}
+export type MembershipKeySpecifier = ('createdAt' | 'id' | 'portfolio' | 'role' | 'updatedAt' | 'user' | MembershipKeySpecifier)[]
+export type MembershipFieldPolicy = {
+  createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+  id?: FieldPolicy<any> | FieldReadFunction<any>,
+  portfolio?: FieldPolicy<any> | FieldReadFunction<any>,
+  role?: FieldPolicy<any> | FieldReadFunction<any>,
+  updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+  user?: FieldPolicy<any> | FieldReadFunction<any>,
+}
+export type MutationKeySpecifier = ('createFund' | 'createPortfolio' | 'createPortfolioFund' | 'deleteFund' | 'deletePortfolio' | 'deletePortfolioFund' | 'forgotPassword' | 'resendCode' | 'resetPassword' | 'signIn' | 'signUp' | 'updateFund' | 'updatePortfolio' | 'updatePortfolioFund' | 'verifyCode' | MutationKeySpecifier)[]
 export type MutationFieldPolicy = {
+  createFund?: FieldPolicy<any> | FieldReadFunction<any>,
+  createPortfolio?: FieldPolicy<any> | FieldReadFunction<any>,
+  createPortfolioFund?: FieldPolicy<any> | FieldReadFunction<any>,
+  deleteFund?: FieldPolicy<any> | FieldReadFunction<any>,
+  deletePortfolio?: FieldPolicy<any> | FieldReadFunction<any>,
+  deletePortfolioFund?: FieldPolicy<any> | FieldReadFunction<any>,
   forgotPassword?: FieldPolicy<any> | FieldReadFunction<any>,
   resendCode?: FieldPolicy<any> | FieldReadFunction<any>,
   resetPassword?: FieldPolicy<any> | FieldReadFunction<any>,
   signIn?: FieldPolicy<any> | FieldReadFunction<any>,
   signUp?: FieldPolicy<any> | FieldReadFunction<any>,
+  updateFund?: FieldPolicy<any> | FieldReadFunction<any>,
+  updatePortfolio?: FieldPolicy<any> | FieldReadFunction<any>,
+  updatePortfolioFund?: FieldPolicy<any> | FieldReadFunction<any>,
   verifyCode?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type NodeKeySpecifier = ('createdAt' | 'id' | 'updatedAt' | NodeKeySpecifier)[]
@@ -528,16 +990,53 @@ export type PageInfoFieldPolicy = {
   hasPreviousPage?: FieldPolicy<any> | FieldReadFunction<any>,
   startCursor?: FieldPolicy<any> | FieldReadFunction<any>,
 }
-export type QueryKeySpecifier = ('add' | 'me' | QueryKeySpecifier)[]
+export type PagePayloadKeySpecifier = ('nodes' | 'pageInfo' | 'total' | PagePayloadKeySpecifier)[]
+export type PagePayloadFieldPolicy = {
+  nodes?: FieldPolicy<any> | FieldReadFunction<any>,
+  pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
+  total?: FieldPolicy<any> | FieldReadFunction<any>,
+}
+export type PortfolioKeySpecifier = ('createdAt' | 'description' | 'funds' | 'id' | 'members' | 'name' | 'updatedAt' | PortfolioKeySpecifier)[]
+export type PortfolioFieldPolicy = {
+  createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+  description?: FieldPolicy<any> | FieldReadFunction<any>,
+  funds?: FieldPolicy<any> | FieldReadFunction<any>,
+  id?: FieldPolicy<any> | FieldReadFunction<any>,
+  members?: FieldPolicy<any> | FieldReadFunction<any>,
+  name?: FieldPolicy<any> | FieldReadFunction<any>,
+  updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+}
+export type PortfolioFundKeySpecifier = ('cost' | 'createdAt' | 'fund' | 'id' | 'portfolio' | 'units' | 'updatedAt' | PortfolioFundKeySpecifier)[]
+export type PortfolioFundFieldPolicy = {
+  cost?: FieldPolicy<any> | FieldReadFunction<any>,
+  createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+  fund?: FieldPolicy<any> | FieldReadFunction<any>,
+  id?: FieldPolicy<any> | FieldReadFunction<any>,
+  portfolio?: FieldPolicy<any> | FieldReadFunction<any>,
+  units?: FieldPolicy<any> | FieldReadFunction<any>,
+  updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+}
+export type PortfolioFundsPayloadKeySpecifier = ('nodes' | 'pageInfo' | 'total' | PortfolioFundsPayloadKeySpecifier)[]
+export type PortfolioFundsPayloadFieldPolicy = {
+  nodes?: FieldPolicy<any> | FieldReadFunction<any>,
+  pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
+  total?: FieldPolicy<any> | FieldReadFunction<any>,
+}
+export type QueryKeySpecifier = ('add' | 'fund' | 'funds' | 'me' | 'portfolio' | 'portfolioFund' | 'portfolioFunds' | QueryKeySpecifier)[]
 export type QueryFieldPolicy = {
   add?: FieldPolicy<any> | FieldReadFunction<any>,
+  fund?: FieldPolicy<any> | FieldReadFunction<any>,
+  funds?: FieldPolicy<any> | FieldReadFunction<any>,
   me?: FieldPolicy<any> | FieldReadFunction<any>,
+  portfolio?: FieldPolicy<any> | FieldReadFunction<any>,
+  portfolioFund?: FieldPolicy<any> | FieldReadFunction<any>,
+  portfolioFunds?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type SuccessPayloadKeySpecifier = ('error' | SuccessPayloadKeySpecifier)[]
 export type SuccessPayloadFieldPolicy = {
   error?: FieldPolicy<any> | FieldReadFunction<any>,
 }
-export type UserKeySpecifier = ('codes' | 'createdAt' | 'firstName' | 'id' | 'isBlocked' | 'isVerified' | 'lastName' | 'mobile' | 'name' | 'password' | 'salt' | 'status' | 'token' | 'updatedAt' | UserKeySpecifier)[]
+export type UserKeySpecifier = ('codes' | 'createdAt' | 'firstName' | 'id' | 'isBlocked' | 'isVerified' | 'lastName' | 'memberships' | 'mobile' | 'name' | 'password' | 'salt' | 'status' | 'token' | 'updatedAt' | UserKeySpecifier)[]
 export type UserFieldPolicy = {
   codes?: FieldPolicy<any> | FieldReadFunction<any>,
   createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -546,6 +1045,7 @@ export type UserFieldPolicy = {
   isBlocked?: FieldPolicy<any> | FieldReadFunction<any>,
   isVerified?: FieldPolicy<any> | FieldReadFunction<any>,
   lastName?: FieldPolicy<any> | FieldReadFunction<any>,
+  memberships?: FieldPolicy<any> | FieldReadFunction<any>,
   mobile?: FieldPolicy<any> | FieldReadFunction<any>,
   name?: FieldPolicy<any> | FieldReadFunction<any>,
   password?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -559,6 +1059,18 @@ export type StrictTypedTypePolicies = {
     keyFields?: false | CodeKeySpecifier | (() => undefined | CodeKeySpecifier),
     fields?: CodeFieldPolicy,
   },
+  Fund?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?: false | FundKeySpecifier | (() => undefined | FundKeySpecifier),
+    fields?: FundFieldPolicy,
+  },
+  FundsPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?: false | FundsPayloadKeySpecifier | (() => undefined | FundsPayloadKeySpecifier),
+    fields?: FundsPayloadFieldPolicy,
+  },
+  Membership?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?: false | MembershipKeySpecifier | (() => undefined | MembershipKeySpecifier),
+    fields?: MembershipFieldPolicy,
+  },
   Mutation?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | MutationKeySpecifier | (() => undefined | MutationKeySpecifier),
     fields?: MutationFieldPolicy,
@@ -570,6 +1082,22 @@ export type StrictTypedTypePolicies = {
   PageInfo?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | PageInfoKeySpecifier | (() => undefined | PageInfoKeySpecifier),
     fields?: PageInfoFieldPolicy,
+  },
+  PagePayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?: false | PagePayloadKeySpecifier | (() => undefined | PagePayloadKeySpecifier),
+    fields?: PagePayloadFieldPolicy,
+  },
+  Portfolio?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?: false | PortfolioKeySpecifier | (() => undefined | PortfolioKeySpecifier),
+    fields?: PortfolioFieldPolicy,
+  },
+  PortfolioFund?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?: false | PortfolioFundKeySpecifier | (() => undefined | PortfolioFundKeySpecifier),
+    fields?: PortfolioFundFieldPolicy,
+  },
+  PortfolioFundsPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?: false | PortfolioFundsPayloadKeySpecifier | (() => undefined | PortfolioFundsPayloadKeySpecifier),
+    fields?: PortfolioFundsPayloadFieldPolicy,
   },
   Query?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | QueryKeySpecifier | (() => undefined | QueryKeySpecifier),

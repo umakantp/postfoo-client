@@ -54,3 +54,8 @@ export const resetPasswordSchema = z.object({
   message: 'Passwords do not match',
   path: ['confirmPassword'],
 })
+
+export const portfolioFormSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 3 characters long').max(40, 'Name can be maximum of 40 characters'),
+  description: z.string().optional(),
+})

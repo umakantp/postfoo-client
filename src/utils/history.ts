@@ -12,6 +12,7 @@ import { removeTrailingSlash } from 'src/utils/utils'
 // useParams of React Router DOM.
 export type UrlParams = {
   userId?: string,
+  portfolioId?: string,
 }
 
 type UrlQuery = Record<string, string | undefined | string[]>
@@ -82,7 +83,7 @@ export type Navigate = (route: Route, props?: UrlParams, query?: UrlQuery, repla
 
 export const useNavigation = () => {
   const { push, replace } = useRouter()
-  return React.useCallback<Navigate>((route, props, query, replaceParam = false) => {
+  return React.useCallback<Navigate>((route: Route, props?: UrlParams, query?: UrlQuery, replaceParam = false) => {
     // These can also be overriden by event handlers
     const eventData: NavigationData = { isPrevented: false, route, props, query, replace: replaceParam }
     navigationEvents.emit(NavigationEvent.Changing, eventData)
@@ -124,7 +125,7 @@ const matchesPathname = (asPath: string, pathname: string) => {
 export const useMatchedRoute = () => {
   const pathname = usePathname()
   for (const routeKey of Object.keys(routes)) {
-    const r = routes[routeKey] as string
+    const r = routes[routeKey as Route] as string
     if (pathname && matchesPathname(pathname, r)) {
       return r
     }

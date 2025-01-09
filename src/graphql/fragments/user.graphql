@@ -8,6 +8,14 @@ fragment MyUserResponse on User {
   status
   isVerified
   isBlocked
+  memberships {
+    id
+    role
+    portfolio {
+      id
+      name
+    }
+  }
 }
 
 fragment GuestUserResponse on User {

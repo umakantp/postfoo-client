@@ -1,0 +1,5 @@
+query portfolio($portfolioId: ID!) {
+  portfolio(portfolioId: $portfolioId) {
+    ...PortfolioResponse
+  }
+}

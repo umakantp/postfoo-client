@@ -11,7 +11,8 @@
     "lint:fix": "npm run lint -- --fix",
     "lint:codegen": "eslint ./src/generated/graphql.ts --fix",
     "test": "exit 1",
-    "codegen": "graphql-codegen --config codegen.yml && npm run lint:codegen"
+    "codegen": "graphql-codegen --config codegen.yml && npm run lint:codegen",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-popover": "^1.1.4",
     "@radix-ui/react-scroll-area": "^1.2.2",
+    "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-tabs": "^1.1.2",
     "@radix-ui/react-toast": "^1.2.4",
     "@tailwindcss/typography": "^0.5.15",

@@ -4,50 +4,51 @@ import Link from 'next/link'
 import * as React from 'react'
 import { useAuth } from 'src/components/auth-provider'
 
+import NavigationLink, { MenuItem } from 'src/components/navigation/navigation-link'
 import MobileNav from 'src/components/navigation/navigation-mobile'
-import NavigationLink from 'src/components/navigation/navitation-link'
 import { Icons } from 'src/components/ui/icons'
 import { routes } from 'src/utils/constants'
+
 
 const MainNav: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false)
   const { user } = useAuth()
 
-  const publicItems = [
+  const publicItems: MenuItem[] = [
     {
       title: 'Home',
-      href: routes.HOME,
+      href: 'HOME',
     },
     {
       title: 'Pricing',
-      href: routes.PRICING,
+      href: 'PRICING',
     },
     {
       title: 'Sign In',
-      href: routes.SIGN_IN,
+      href: 'SIGN_IN',
     },
     {
       title: 'Sign Up',
-      href: routes.SIGN_UP,
+      href: 'SIGN_UP',
     },
   ]
 
-  const signedInItems = [
+  const signedInItems: MenuItem[] = [
     {
       title: 'Portfolio',
-      href: routes.PORTFOLIO,
+      href: 'PORTFOLIOS',
     },
     {
       title: 'Subscription',
-      href: routes.ACCOUNT_SUBSCRIPTION,
+      href: 'ACCOUNT_SUBSCRIPTION',
     },
     {
       title: 'Settings',
-      href: routes.ACCOUNT_PROFILE,
+      href: 'ACCOUNT_PROFILE',
     },
     {
       title: 'Sign Out',
-      href: routes.SIGN_OUT,
+      href: 'SIGN_OUT',
     },
   ]
 

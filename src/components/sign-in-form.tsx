@@ -14,7 +14,7 @@ import { Input } from 'src/components/ui/input'
 import { Label } from 'src/components/ui/label'
 import { PhoneInput } from 'src/components/ui/phone-input'
 import { useSignInMutation } from 'src/generated/graphql'
-import { routes } from 'src/utils/constants'
+import { Route, routes } from 'src/utils/constants'
 import { signinSchema } from 'src/utils/form'
 import { useNavigation } from 'src/utils/history'
 import logger from 'src/utils/logger'
@@ -53,7 +53,7 @@ const SignInForm: React.FC = () => {
         const user = signInResult.data.signIn
         setUser(user)
         const fromRoute = searchParams?.get('from')
-        return navigate(fromRoute ? fromRoute : 'HOME')
+        return navigate(fromRoute ? fromRoute as Route : 'PORTFOLIOS')
       }
     } catch (error: any) {
       if (error.graphQLErrors) {

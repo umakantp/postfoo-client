@@ -3,7 +3,7 @@ import * as React from 'react'
 import { routes } from 'src/utils/constants'
 
 const Page: React.FC = () => (
-  <div className="container flex flex-col mt-8">
+  <div className="flex flex-col mt-8">
     <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
       Privacy Policy
     </h2>

@@ -1,4 +1,4 @@
-export const routes: Record<string, string> = {
+export const routes = {
   // Public routes
   HOME: '/',
   TERMS_OF_SERVICE: '/content/terms-of-service',
@@ -16,7 +16,11 @@ export const routes: Record<string, string> = {
   // Auth routes protected
   ACCOUNT_PROFILE: '/account/profile',
   ACCOUNT_SUBSCRIPTION: '/account/subscription',
-  PORTFOLIO: '/portfolio',
+  // Generally a list route, but we should default/first portfolio instead.
+  PORTFOLIOS: '/portfolios',
+  // Same as above, but specific to a portfolio.
+  PORTFOLIO_DETAIL: '/portfolios/:portfolioId',
+  PORTFOLIO_CREATE: '/portfolios/create',
 }
 
 // This is list of routes which are not protected. So we don't check for auth.
