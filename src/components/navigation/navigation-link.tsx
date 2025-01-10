@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import * as React from 'react'
 import { buttonVariants } from 'src/components/ui/button'
-import { Route } from 'src/utils/constants'
+import { Route, routes } from 'src/utils/constants'
 import { useIsHrefActive } from 'src/utils/history'
 import { cn } from 'src/utils/utils'
 
@@ -19,7 +19,7 @@ interface NavigationLinkProps {
 const NavigationLink: React.FC<NavigationLinkProps> = ({ item }) => {
   const isActive = useIsHrefActive()
   return <Link
-    href={item.href}
+    href={routes[item.href]}
     className={cn(
       'flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm',
       item.href === 'SIGN_UP' ? cn(buttonVariants({ variant: 'outline' }), 'h-auto my-2') : '',

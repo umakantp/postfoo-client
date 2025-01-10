@@ -3,3 +3,9 @@ mutation CreatePortfolio($input: CreatePortfolioInput!) {
     id
   }
 }
+
+mutation CreatePortfolioFund($input: CreatePortfolioFundInput!) {
+  createPortfolioFund(input: $input) {
+    ...PortfolioFundResponse
+  }
+}

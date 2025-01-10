@@ -19,7 +19,13 @@ export const routes = {
   // Generally a list route, but we should default/first portfolio instead.
   PORTFOLIOS: '/portfolios',
   // Same as above, but specific to a portfolio.
-  PORTFOLIO_DETAIL: '/portfolios/:portfolioId',
+  PORTFOLIO_DETAIL: '/portfolios/[portfolioId]',
+  PORTFOLIO_DETAIL_FUNDS: '/portfolios/[portfolioId]/funds',
+  PORTFOLIO_DETAIL_STOCKS: '/portfolios/[portfolioId]/stocks',
+  PORTFOLIO_DETAIL_SCHEMES: '/portfolios/[portfolioId]/schemes',
+  PORTFOLIO_DETAIL_INSURANCES: '/portfolios/[portfolioId]/insurances',
+  PORTFOLIO_DETAIL_RE: '/portfolios/[portfolioId]/real-estates',
+  PORTFOLIO_DETAIL_PERSONAL: '/portfolios/[portfolioId]/personal',
   PORTFOLIO_CREATE: '/portfolios/create',
 }
 

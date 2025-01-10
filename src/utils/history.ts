@@ -25,7 +25,6 @@ const generatePath = (pathname: string, query?: UrlParams, hash?: string | null 
     if (slug.startsWith('...')) {
       slug = slug.replace('...', '') as keyof UrlParams
     }
-
     const value: string | string[] = remainingQuery[slug]!
     delete remainingQuery[slug]
     if (Array.isArray(value)) {
@@ -38,7 +37,6 @@ const generatePath = (pathname: string, query?: UrlParams, hash?: string | null 
 
   // Append remaining query as a querystring, if needed:
   const qs = stringify(remainingQuery)
-
   if (qs) {
     asPath += `?${qs}`
   }

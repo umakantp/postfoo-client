@@ -396,7 +396,7 @@ export type QueryFundArgs = {
 
 
 export type QueryFundsArgs = {
-  input: FundsInput,
+  input?: InputMaybe<FundsInput>,
 }
 
 
@@ -501,9 +501,13 @@ export type VerifyCodeInput = {
   userId?: InputMaybe<Scalars['ID']['input']>,
 }
 
+export type FundResponseFragment = { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number }
+
 export type PageInfoResponseFragment = { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined }
 
 export type PortfolioResponseFragment = { id: string, name: string, description?: string | undefined }
+
+export type PortfolioFundResponseFragment = { id: string, units: number, cost: number, fund: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number } }
 
 export type MyUserResponseFragment = { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean, memberships: Array<{ id: string, role: UserRole, portfolio: { id: string, name: string } }> }
 
@@ -558,10 +562,24 @@ export type CreatePortfolioMutationVariables = Exact<{
 
 export type CreatePortfolioMutation = { createPortfolio: { id: string } }
 
+export type CreatePortfolioFundMutationVariables = Exact<{
+  input: CreatePortfolioFundInput,
+}>
+
+
+export type CreatePortfolioFundMutation = { createPortfolioFund: { id: string, units: number, cost: number, fund: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number } } }
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>
 
 
 export type MeQuery = { me?: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean, memberships: Array<{ id: string, role: UserRole, portfolio: { id: string, name: string } }> } | undefined }
+
+export type FundsQueryVariables = Exact<{
+  input?: InputMaybe<FundsInput>,
+}>
+
+
+export type FundsQuery = { funds: { nodes: Array<{ id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number }>, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined } } }
 
 export type PortfolioQueryVariables = Exact<{
   portfolioId: Scalars['ID']['input'],
@@ -569,6 +587,13 @@ export type PortfolioQueryVariables = Exact<{
 
 
 export type PortfolioQuery = { portfolio: { id: string, name: string, description?: string | undefined } }
+
+export type PortfolioFundsQueryVariables = Exact<{
+  input: PortfolioFundsInput,
+}>
+
+
+export type PortfolioFundsQuery = { portfolioFunds: { nodes: Array<{ id: string, units: number, cost: number, fund: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number } }>, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined } } }
 
 export const PageInfoResponseFragmentDoc = gql`
     fragment PageInfoResponse on PageInfo {
@@ -585,6 +610,27 @@ export const PortfolioResponseFragmentDoc = gql`
   description
 }
     `
+export const FundResponseFragmentDoc = gql`
+    fragment FundResponse on Fund {
+  id
+  name
+  description
+  plan
+  type
+  category
+  lastNav
+}
+    `
+export const PortfolioFundResponseFragmentDoc = gql`
+    fragment PortfolioFundResponse on PortfolioFund {
+  id
+  fund {
+    ...FundResponse
+  }
+  units
+  cost
+}
+    ${FundResponseFragmentDoc}`
 export const MyUserResponseFragmentDoc = gql`
     fragment MyUserResponse on User {
   id
@@ -842,6 +888,39 @@ export function useCreatePortfolioMutation(baseOptions?: Apollo.MutationHookOpti
 export type CreatePortfolioMutationHookResult = ReturnType<typeof useCreatePortfolioMutation>
 export type CreatePortfolioMutationResult = Apollo.MutationResult<CreatePortfolioMutation>
 export type CreatePortfolioMutationOptions = Apollo.BaseMutationOptions<CreatePortfolioMutation, CreatePortfolioMutationVariables>
+export const CreatePortfolioFundDocument = gql`
+    mutation CreatePortfolioFund($input: CreatePortfolioFundInput!) {
+  createPortfolioFund(input: $input) {
+    ...PortfolioFundResponse
+  }
+}
+    ${PortfolioFundResponseFragmentDoc}`
+export type CreatePortfolioFundMutationFn = Apollo.MutationFunction<CreatePortfolioFundMutation, CreatePortfolioFundMutationVariables>
+
+/**
+ * __useCreatePortfolioFundMutation__
+ *
+ * To run a mutation, you first call `useCreatePortfolioFundMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePortfolioFundMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPortfolioFundMutation, { data, loading, error }] = useCreatePortfolioFundMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePortfolioFundMutation(baseOptions?: Apollo.MutationHookOptions<CreatePortfolioFundMutation, CreatePortfolioFundMutationVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useMutation<CreatePortfolioFundMutation, CreatePortfolioFundMutationVariables>(CreatePortfolioFundDocument, options)
+}
+export type CreatePortfolioFundMutationHookResult = ReturnType<typeof useCreatePortfolioFundMutation>
+export type CreatePortfolioFundMutationResult = Apollo.MutationResult<CreatePortfolioFundMutation>
+export type CreatePortfolioFundMutationOptions = Apollo.BaseMutationOptions<CreatePortfolioFundMutation, CreatePortfolioFundMutationVariables>
 export const MeDocument = gql`
     query me {
   me {
@@ -881,6 +960,52 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>
 export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>
+export const FundsDocument = gql`
+    query funds($input: FundsInput) {
+  funds(input: $input) {
+    nodes {
+      ...FundResponse
+    }
+    pageInfo {
+      ...PageInfoResponse
+    }
+  }
+}
+    ${FundResponseFragmentDoc}
+${PageInfoResponseFragmentDoc}`
+
+/**
+ * __useFundsQuery__
+ *
+ * To run a query within a React component, call `useFundsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFundsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFundsQuery(baseOptions?: Apollo.QueryHookOptions<FundsQuery, FundsQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<FundsQuery, FundsQueryVariables>(FundsDocument, options)
+}
+export function useFundsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FundsQuery, FundsQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<FundsQuery, FundsQueryVariables>(FundsDocument, options)
+}
+export function useFundsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FundsQuery, FundsQueryVariables>) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+  return Apollo.useSuspenseQuery<FundsQuery, FundsQueryVariables>(FundsDocument, options)
+}
+export type FundsQueryHookResult = ReturnType<typeof useFundsQuery>
+export type FundsLazyQueryHookResult = ReturnType<typeof useFundsLazyQuery>
+export type FundsSuspenseQueryHookResult = ReturnType<typeof useFundsSuspenseQuery>
+export type FundsQueryResult = Apollo.QueryResult<FundsQuery, FundsQueryVariables>
 export const PortfolioDocument = gql`
     query portfolio($portfolioId: ID!) {
   portfolio(portfolioId: $portfolioId) {
@@ -921,6 +1046,52 @@ export type PortfolioQueryHookResult = ReturnType<typeof usePortfolioQuery>
 export type PortfolioLazyQueryHookResult = ReturnType<typeof usePortfolioLazyQuery>
 export type PortfolioSuspenseQueryHookResult = ReturnType<typeof usePortfolioSuspenseQuery>
 export type PortfolioQueryResult = Apollo.QueryResult<PortfolioQuery, PortfolioQueryVariables>
+export const PortfolioFundsDocument = gql`
+    query portfolioFunds($input: PortfolioFundsInput!) {
+  portfolioFunds(input: $input) {
+    nodes {
+      ...PortfolioFundResponse
+    }
+    pageInfo {
+      ...PageInfoResponse
+    }
+  }
+}
+    ${PortfolioFundResponseFragmentDoc}
+${PageInfoResponseFragmentDoc}`
+
+/**
+ * __usePortfolioFundsQuery__
+ *
+ * To run a query within a React component, call `usePortfolioFundsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePortfolioFundsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePortfolioFundsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePortfolioFundsQuery(baseOptions: Apollo.QueryHookOptions<PortfolioFundsQuery, PortfolioFundsQueryVariables> & ({ variables: PortfolioFundsQueryVariables, skip?: boolean } | { skip: boolean }) ) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useQuery<PortfolioFundsQuery, PortfolioFundsQueryVariables>(PortfolioFundsDocument, options)
+}
+export function usePortfolioFundsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PortfolioFundsQuery, PortfolioFundsQueryVariables>) {
+  const options = {...defaultOptions, ...baseOptions}
+  return Apollo.useLazyQuery<PortfolioFundsQuery, PortfolioFundsQueryVariables>(PortfolioFundsDocument, options)
+}
+export function usePortfolioFundsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PortfolioFundsQuery, PortfolioFundsQueryVariables>) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+  return Apollo.useSuspenseQuery<PortfolioFundsQuery, PortfolioFundsQueryVariables>(PortfolioFundsDocument, options)
+}
+export type PortfolioFundsQueryHookResult = ReturnType<typeof usePortfolioFundsQuery>
+export type PortfolioFundsLazyQueryHookResult = ReturnType<typeof usePortfolioFundsLazyQuery>
+export type PortfolioFundsSuspenseQueryHookResult = ReturnType<typeof usePortfolioFundsSuspenseQuery>
+export type PortfolioFundsQueryResult = Apollo.QueryResult<PortfolioFundsQuery, PortfolioFundsQueryVariables>
 export type CodeKeySpecifier = ('code' | 'createdAt' | 'expireAt' | 'id' | 'updatedAt' | 'user' | CodeKeySpecifier)[]
 export type CodeFieldPolicy = {
   code?: FieldPolicy<any> | FieldReadFunction<any>,

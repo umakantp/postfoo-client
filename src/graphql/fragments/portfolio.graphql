@@ -3,3 +3,12 @@ fragment PortfolioResponse on Portfolio {
   name
   description
 }
+
+fragment PortfolioFundResponse on PortfolioFund {
+  id
+  fund {
+    ...FundResponse
+  }
+  units
+  cost
+}

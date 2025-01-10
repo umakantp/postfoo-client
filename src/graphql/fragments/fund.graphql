@@ -1,0 +1,9 @@
+fragment FundResponse on Fund {
+  id
+  name
+  description
+  plan
+  type
+  category
+  lastNav
+}

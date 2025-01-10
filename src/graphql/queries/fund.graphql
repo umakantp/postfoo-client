@@ -1,0 +1,10 @@
+query funds($input: FundsInput) {
+  funds(input: $input) {
+    nodes {
+      ...FundResponse
+    }
+    pageInfo {
+      ...PageInfoResponse
+    }
+  }
+}

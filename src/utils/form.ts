@@ -59,3 +59,9 @@ export const portfolioFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 3 characters long').max(40, 'Name can be maximum of 40 characters'),
   description: z.string().optional(),
 })
+
+export const portfolioAddFundFormSchema = z.object({
+  fundId: z.string().length(12, 'Selec the fund'),
+  cost: z.coerce.number().positive('Cost must be positive'),
+  units: z.coerce.number().positive('Units must be positive'),
+})

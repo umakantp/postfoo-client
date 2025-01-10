@@ -3,3 +3,15 @@ query portfolio($portfolioId: ID!) {
     ...PortfolioResponse
   }
 }
+
+
+query portfolioFunds($input: PortfolioFundsInput!) {
+  portfolioFunds(input: $input) {
+    nodes {
+      ...PortfolioFundResponse
+    }
+    pageInfo {
+      ...PageInfoResponse
+    }
+  }
+}
