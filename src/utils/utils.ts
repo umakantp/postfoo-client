@@ -63,3 +63,40 @@ export const setFormErrors = (error: any, setError: any) => {
     logger.error(error)
   }
 }
+
+/**
+ * Safe mathematical rounding
+ * Why is this needed? Try doing: `0.1 + 0.2`
+ */
+export const safeFloor = (num: number, maxDecimals = 2): number => {
+  const int = toFloorInt(num, maxDecimals)
+  return fromInt(int, maxDecimals)
+}
+
+/** Usually preferred over safeFloor (f.e. 17067.92) except when the number must NEVER round up (like bank balances) */
+export const safeRound = (num: number, maxDecimals = 2): number => {
+  const int = toInt(num, maxDecimals)
+  return fromInt(int, maxDecimals)
+}
+
+export const parseInteger = (val: any): number => {
+  return Number.parseInt(val, 10)
+}
+
+/** Converts a float to an integer, to do math on it */
+export const toInt = (num: number, maxDecimals = 2): number => {
+  return Math.round(num * (10 ** maxDecimals))
+}
+
+/** This one ensures it always rounds down */
+export const toFloorInt = (num: number, maxDecimals = 2): number => {
+  // Sadly floor(num * 100) yields the wrong number for f.e.: 17067.92
+  const [integer, decimals = ''] = num.toString().split('.')
+  const str = integer + decimals.padEnd(maxDecimals, '0').slice(0, maxDecimals)
+  return parseInteger(str)
+}
+
+/** Brings the float back from an integer */
+export const fromInt = (num: number, maxDecimals = 2): number => {
+  return Math.floor(num) / (10 ** maxDecimals)
+}

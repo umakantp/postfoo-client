@@ -14,6 +14,7 @@ import { Button } from 'src/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from 'src/components/ui/dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from 'src/components/ui/table'
 import { FundPlan, FundType, PortfolioFundResponseFragment, PortfolioFundsQuery, PortfolioResponseFragment, usePortfolioFundsQuery } from 'src/generated/graphql'
+import { safeRound } from 'src/utils/utils'
 
 type PortfolioFundCols = Pick<PortfolioFundResponseFragment, 'id' | 'units' | 'cost'> & { name: string, lastNav: number, value: number, plan?: FundPlan, type?: FundType }
 
@@ -26,7 +27,7 @@ const parseFunds = (data?: PortfolioFundsQuery): PortfolioFundCols[] => {
     type: node.fund.type,
     units: node.units,
     cost: node.cost,
-    value: node.units * node.fund.lastNav,
+    value: safeRound(node.units * node.fund.lastNav),
   })) || []
 }
 
