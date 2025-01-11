@@ -13,15 +13,17 @@ import PortfolioAddFundForm from 'src/components/portfolio/components/portfolio-
 import { Button } from 'src/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from 'src/components/ui/dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from 'src/components/ui/table'
-import { PortfolioFundResponseFragment, PortfolioFundsQuery, PortfolioResponseFragment, usePortfolioFundsQuery } from 'src/generated/graphql'
+import { FundPlan, FundType, PortfolioFundResponseFragment, PortfolioFundsQuery, PortfolioResponseFragment, usePortfolioFundsQuery } from 'src/generated/graphql'
 
-type PortfolioFundCols = Pick<PortfolioFundResponseFragment, 'id' | 'units' | 'cost'> & { name: string, lastNav: number, value: number }
+type PortfolioFundCols = Pick<PortfolioFundResponseFragment, 'id' | 'units' | 'cost'> & { name: string, lastNav: number, value: number, plan?: FundPlan, type?: FundType }
 
 const parseFunds = (data?: PortfolioFundsQuery): PortfolioFundCols[] => {
   return data?.portfolioFunds?.nodes.map(node => ({
     id: node.id,
     name: node.fund.name,
     lastNav: node.fund.lastNav,
+    plan: node.fund.plan,
+    type: node.fund.type,
     units: node.units,
     cost: node.cost,
     value: node.units * node.fund.lastNav,
@@ -32,6 +34,9 @@ const columns: ColumnDef<PortfolioFundCols>[] = [
   {
     accessorKey: 'name',
     header: 'Name',
+    cell: ({ row }) => {
+      return <>{row.getValue('name')} - {row.original.type} - {row.original.plan}</>
+    },
   },
   {
     accessorKey: 'lastNav',

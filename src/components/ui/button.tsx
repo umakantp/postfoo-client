@@ -17,9 +17,12 @@ const buttonVariants = cva(
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'underline-offset-4 hover:underline text-primary',
+        tabIcon: 'border',
       },
       size: {
         default: 'h-10 py-2 px-4',
+        tabIcon: 'h-7 p-2',
+        xs: 'h-7 px-1 rounded-md',
         sm: 'h-9 px-3 rounded-md',
         lg: 'h-11 px-8 rounded-md',
       },

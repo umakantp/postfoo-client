@@ -74,10 +74,10 @@ const Portfolios: React.FC = () => {
             portfolios={portfolios}
           />
         </div>
-        <div>
-          <Link className={cn(buttonVariants({ variant: 'outline' }))} href={routes.PORTFOLIO_CREATE}>
+        <div className='flex flex-row items-center'>
+          <Link className={cn(buttonVariants({ variant: 'outline', size: 'xs' }))} href={routes.PORTFOLIO_CREATE}>
             <PlusIcon className="mr-2 h-4 w-4" />
-            Create another portfolio
+            Add portfolio
           </Link>
         </div>
       </div>
