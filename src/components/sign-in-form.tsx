@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 import Link from 'next/link'
-import { useAuth } from 'src/components/auth-provider'
+import { useAuth } from 'src/components/providers/auth-provider'
 import { buttonVariants } from 'src/components/ui/button'
 import { Icons } from 'src/components/ui/icons'
 import { Input } from 'src/components/ui/input'

@@ -5,9 +5,10 @@ import { Inter as FontSans } from 'next/font/google'
 import localFont from 'next/font/local'
 import * as React from 'react'
 import LayoutMain from 'src/app/layout-main'
-import AuthProvider from 'src/components/auth-provider'
+import AuthProvider from 'src/components/providers/auth-provider'
+import { fetchHpInputs, HpInputProps, HpProvider } from 'src/components/providers/hp-provider'
 
-import ThemeProvider from 'src/components/theme-provider'
+import ThemeProvider from 'src/components/providers/theme-provider'
 import { Toaster } from 'src/components/ui/toaster'
 import 'src/styles/global.css'
 import { getClient } from 'src/utils/apolloClient'
@@ -32,6 +33,12 @@ interface RootLayoutProps {
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const token = get<string | undefined>(storageKeys.AUTH_TOKEN)
   const queryClient = getClient(token)
+  const [hpInputs, setHpInputs] = React.useState<Partial<HpInputProps>>({})
+
+  React.useEffect(() => {
+    fetchHpInputs().then(setHpInputs)
+  }, [fetchHpInputs])
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -44,14 +51,16 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
       >
         <ApolloProvider client={queryClient}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <AuthProvider>
-              <>
-                <LayoutMain>
-                  {children}
-                </LayoutMain>
-                <Toaster />
-              </>
-            </AuthProvider>
+            <HpProvider {...hpInputs}>
+              <AuthProvider>
+                <>
+                  <LayoutMain>
+                    {children}
+                  </LayoutMain>
+                  <Toaster />
+                </>
+              </AuthProvider>
+            </HpProvider>
           </ThemeProvider>
         </ApolloProvider>
       </body>

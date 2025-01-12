@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { useAuth } from 'src/components/auth-provider'
+import { useAuth } from 'src/components/providers/auth-provider'
 import { Spinner } from 'src/components/ui/spinner'
 import { routes } from 'src/utils/constants'
 import { hardRedirect } from 'src/utils/history'

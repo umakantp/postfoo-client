@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import * as React from 'react'
-import { useAuth } from 'src/components/auth-provider'
+import { useAuth } from 'src/components/providers/auth-provider'
 
 import NavigationLink, { MenuItem } from 'src/components/navigation/navigation-link'
 import MobileNav from 'src/components/navigation/navigation-mobile'
