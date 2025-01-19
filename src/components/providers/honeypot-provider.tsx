@@ -1,7 +1,8 @@
 import * as React from 'react'
+import { HONEYPOT_DEFAULT_NAME_FIELD_NAME, HONEYPOT_DEFAULT_VALID_FROM_FIELD_NAME } from 'src/utils/constants'
 
-// Same as HoneypotInputProps in postfoo-server/src/utils/honeypot.ts
-export interface HpInputProps {
+// Same as HoneypotInputProps in postfoo-server:src/utils/honeypot.ts
+export interface HoneypotInputProps {
   /**
 	 * The name expected to be used by the honeypot input field.
 	 */
@@ -16,19 +17,23 @@ export interface HpInputProps {
   encryptedValidFrom: string,
 }
 
-type HpContextType = Partial<HpInputProps>
+type HoneypotContextType = Partial<HoneypotInputProps>
 
-const HoneypotContext = React.createContext<HpContextType>({})
+const HoneypotContext = React.createContext<HoneypotContextType>({})
 
-interface HpInputsProps {
-  label: string,
+interface HoneypotInputsProps {
+  label?: string,
 }
 
-export const HpInputs: React.FC<HpInputsProps> = ({ label = 'Please leave this field blank'}) => {
+export const useHoneypot = () => {
+  return React.useContext(HoneypotContext)
+}
+
+export const HoneypotInputs: React.FC<HoneypotInputsProps> = ({ label = 'Please leave this field blank'}) => {
   let context = React.useContext(HoneypotContext)
   let {
-    nameFieldName = 'name__confirm',
-    validFromFieldName = 'from__confirm',
+    nameFieldName = HONEYPOT_DEFAULT_NAME_FIELD_NAME,
+    validFromFieldName = HONEYPOT_DEFAULT_VALID_FROM_FIELD_NAME,
     encryptedValidFrom,
   } = context
 
@@ -54,11 +59,11 @@ export const HpInputs: React.FC<HpInputsProps> = ({ label = 'Please leave this f
   )
 }
 
-export type HpProviderProps = HpContextType & {
+export type HoneypotProviderProps = HoneypotContextType & {
   children: React.ReactNode,
 }
 
-export const HpProvider: React.FC<HpProviderProps> = ({ children, ...context }) => {
+export const HoneypotProvider: React.FC<HoneypotProviderProps> = ({ children, ...context }) => {
   return (
     <HoneypotContext.Provider value={context}>
       {children}
@@ -66,11 +71,11 @@ export const HpProvider: React.FC<HpProviderProps> = ({ children, ...context }) 
   )
 }
 
-export const fetchHpInputs = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/gethp`)
+export const fetchHoneypotInputs = async () => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-honeypot-inputs`)
   try {
     const data = await response.json()
-    return data.hp
+    return data.honeypot
   } catch {
     return {}
   }

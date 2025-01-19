@@ -1,4 +1,12 @@
+import { HONEYPOT_DEFAULT_NAME_FIELD_NAME, HONEYPOT_DEFAULT_VALID_FROM_FIELD_NAME } from 'src/utils/constants'
 import * as z from 'zod'
+
+export const getHoneypotFormSchema = () => {
+  return {
+    [HONEYPOT_DEFAULT_NAME_FIELD_NAME]: z.string().optional(),
+    [HONEYPOT_DEFAULT_VALID_FROM_FIELD_NAME]: z.string().optional(),
+  }
+}
 
 const passwordSchema = z.string()
   .min(8, 'Password must be at least 8 characters long')
@@ -20,6 +28,7 @@ const otpCodeSchema = z.string()
 export const signinSchema = z.object({
   mobile: mobileSchema,
   password: passwordSchema,
+  ...getHoneypotFormSchema(),
 })
 
 export const signupSchema = z.object({
@@ -39,10 +48,12 @@ export const signupSchema = z.object({
 
 export const verifyCodeSchema = z.object({
   code: otpCodeSchema,
+  ...getHoneypotFormSchema(),
 })
 
 export const forgotPasswordSchema = z.object({
   mobile: mobileSchema,
+  ...getHoneypotFormSchema(),
 })
 
 export const resetPasswordSchema = z.object({
@@ -50,6 +61,7 @@ export const resetPasswordSchema = z.object({
   code: otpCodeSchema,
   password: passwordSchema,
   confirmPassword: passwordSchema,
+  ...getHoneypotFormSchema(),
 }).refine(data => data.confirmPassword === data.password, {
   message: 'Passwords do not match',
   path: ['confirmPassword'],

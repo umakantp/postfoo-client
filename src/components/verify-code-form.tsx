@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 import { REGEXP_ONLY_DIGITS } from 'input-otp'
+import { HoneypotInputs } from 'src/components/providers/honeypot-provider'
 import { Button, buttonVariants } from 'src/components/ui/button'
 import { Icons } from 'src/components/ui/icons'
 import { InputOTP, InputOTPGroup, InputOTPSlot } from 'src/components/ui/input-otp'
@@ -14,7 +15,7 @@ import { useResendCodeMutation, useVerifyCodeMutation } from 'src/generated/grap
 import { verifyCodeSchema } from 'src/utils/form'
 import { useNavigation } from 'src/utils/history'
 import { toast } from 'src/utils/toast'
-import { cn, setFormErrors } from 'src/utils/utils'
+import { cn, getHoneypotFormValues, setFormErrors } from 'src/utils/utils'
 
 type FormData = z.infer<typeof verifyCodeSchema>
 
@@ -72,6 +73,7 @@ const VerifyCodeForm: React.FC = () => {
           input: {
             userId,
             code: data.code,
+            ...getHoneypotFormValues(data),
           },
         },
       })
@@ -122,6 +124,7 @@ const VerifyCodeForm: React.FC = () => {
               </p>
             )}
           </div>
+          <HoneypotInputs />
           <button className={cn(buttonVariants())} disabled={isLoading || isResending}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />

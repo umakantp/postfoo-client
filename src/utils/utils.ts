@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import * as React from 'react'
+import { HONEYPOT_DEFAULT_NAME_FIELD_NAME, HONEYPOT_DEFAULT_VALID_FROM_FIELD_NAME } from 'src/utils/constants'
 import logger from 'src/utils/logger'
 import { twMerge } from 'tailwind-merge'
 
@@ -99,4 +100,17 @@ export const toFloorInt = (num: number, maxDecimals = 2): number => {
 /** Brings the float back from an integer */
 export const fromInt = (num: number, maxDecimals = 2): number => {
   return Math.floor(num) / (10 ** maxDecimals)
+}
+
+export const getHoneypotFormValues = (formData: Record<string, string>) => {
+  return {
+    // This is a hack to make sure the honeypot input is always present even if it's empty
+    // otherwwise graphql doesn't send undefined inputs.
+    [HONEYPOT_DEFAULT_NAME_FIELD_NAME]: formData[HONEYPOT_DEFAULT_NAME_FIELD_NAME] || '',
+    [HONEYPOT_DEFAULT_VALID_FROM_FIELD_NAME]: formData[HONEYPOT_DEFAULT_VALID_FROM_FIELD_NAME],
+  }
+}
+
+export const delay = (ms: number): Promise<void> => {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }

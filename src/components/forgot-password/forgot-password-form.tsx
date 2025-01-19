@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 import Link from 'next/link'
+import { HoneypotInputs } from 'src/components/providers/honeypot-provider'
 import { buttonVariants } from 'src/components/ui/button'
 import { Icons } from 'src/components/ui/icons'
 import { Label } from 'src/components/ui/label'
@@ -13,7 +14,7 @@ import { PhoneInput } from 'src/components/ui/phone-input'
 import { useForgotPasswordMutation } from 'src/generated/graphql'
 import { routes } from 'src/utils/constants'
 import { forgotPasswordSchema } from 'src/utils/form'
-import { cn, setFormErrors } from 'src/utils/utils'
+import { cn, getHoneypotFormValues, setFormErrors } from 'src/utils/utils'
 
 type FormData = z.infer<typeof forgotPasswordSchema>
 
@@ -41,6 +42,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ setStep, setMob
         variables: {
           input: {
             mobile: data.mobile,
+            ...getHoneypotFormValues(data),
           },
         },
       })
@@ -86,6 +88,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ setStep, setMob
               </p>
             )}
           </div>
+          <HoneypotInputs />
           <button className={cn(buttonVariants())} disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />

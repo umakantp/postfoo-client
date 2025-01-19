@@ -36,3 +36,7 @@ export const PUBLIC_ROUTES = [
 
 export type Route = keyof typeof routes
 
+// Default names for the honeypot fields.
+// Same as in, postfoo-server:src/utils/honeypot.ts.
+export const HONEYPOT_DEFAULT_NAME_FIELD_NAME = 'name__confirm'
+export const HONEYPOT_DEFAULT_VALID_FROM_FIELD_NAME = 'from__confirm'

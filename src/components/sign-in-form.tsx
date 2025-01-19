@@ -8,21 +8,23 @@ import * as z from 'zod'
 
 import Link from 'next/link'
 import { useAuth } from 'src/components/providers/auth-provider'
+import { HoneypotInputs, useHoneypot } from 'src/components/providers/honeypot-provider'
 import { buttonVariants } from 'src/components/ui/button'
 import { Icons } from 'src/components/ui/icons'
 import { Input } from 'src/components/ui/input'
 import { Label } from 'src/components/ui/label'
 import { PhoneInput } from 'src/components/ui/phone-input'
 import { useSignInMutation } from 'src/generated/graphql'
-import { Route, routes } from 'src/utils/constants'
+import { HONEYPOT_DEFAULT_VALID_FROM_FIELD_NAME, Route, routes } from 'src/utils/constants'
 import { signinSchema } from 'src/utils/form'
 import { useNavigation } from 'src/utils/history'
 import logger from 'src/utils/logger'
-import { cn } from 'src/utils/utils'
+import { cn, delay, getHoneypotFormValues } from 'src/utils/utils'
 
-type FormData = z.infer<typeof signinSchema>
+type SignInFormData = z.infer<typeof signinSchema>
 
 const SignInForm: React.FC = () => {
+  const { encryptedValidFrom } = useHoneypot()
   const {
     register,
     getValues,
@@ -30,21 +32,25 @@ const SignInForm: React.FC = () => {
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<SignInFormData>({
+    defaultValues: {
+      [HONEYPOT_DEFAULT_VALID_FROM_FIELD_NAME]: encryptedValidFrom,
+    },
     resolver: zodResolver(signinSchema),
   })
   const { setUser } = useAuth()
   const searchParams = useSearchParams()
-  const [signIn, { loading: isLoading }] = useSignInMutation({ fetchPolicy: 'no-cache' })
+  const [signIn, { loading: isLoading }] = useSignInMutation()
   const navigate = useNavigation()
 
-  async function onSubmit(data: FormData) {
+  async function onSubmit(data: SignInFormData) {
     try {
       const signInResult = await signIn({
         variables: {
           input: {
             mobile: data.mobile,
             password: data.password,
+            ...getHoneypotFormValues(data),
           },
         },
       })
@@ -52,6 +58,8 @@ const SignInForm: React.FC = () => {
       if (signInResult.data) {
         const user = signInResult.data.signIn
         setUser(user)
+        // Provider takes to time to set the user in state
+        await delay(100)
         const fromRoute = searchParams?.get('from')
         return navigate(fromRoute ? fromRoute as Route : 'PORTFOLIOS')
       }
@@ -125,6 +133,7 @@ const SignInForm: React.FC = () => {
               </Link>
             </p>
           </div>
+          <HoneypotInputs />
           <button className={cn(buttonVariants())} disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />

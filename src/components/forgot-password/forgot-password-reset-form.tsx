@@ -7,6 +7,7 @@ import * as z from 'zod'
 
 import { REGEXP_ONLY_DIGITS } from 'input-otp'
 import Link from 'next/link'
+import { HoneypotInputs } from 'src/components/providers/honeypot-provider'
 import { buttonVariants } from 'src/components/ui/button'
 import { Icons } from 'src/components/ui/icons'
 import { Input } from 'src/components/ui/input'
@@ -17,7 +18,7 @@ import { routes } from 'src/utils/constants'
 import { resetPasswordSchema } from 'src/utils/form'
 import { useNavigation } from 'src/utils/history'
 import { toast } from 'src/utils/toast'
-import { cn, setFormErrors } from 'src/utils/utils'
+import { cn, getHoneypotFormValues, setFormErrors } from 'src/utils/utils'
 
 type FormData = z.infer<typeof resetPasswordSchema>
 
@@ -50,6 +51,7 @@ const ForgotPasswordResetForm: React.FC<ForgotPasswordResetFormProps> = ({ mobil
             mobile: mobile,
             code: data.code,
             password: data.password,
+            ...getHoneypotFormValues(data),
           },
         },
       })
@@ -124,6 +126,7 @@ const ForgotPasswordResetForm: React.FC<ForgotPasswordResetFormProps> = ({ mobil
               </p>
             )}
           </div>
+          <HoneypotInputs />
           <button className={cn(buttonVariants())} disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
