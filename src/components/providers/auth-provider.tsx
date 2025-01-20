@@ -1,5 +1,7 @@
 'use client'
 
+import Sentry from '@sentry/nextjs'
+import { pick } from 'lodash'
 import * as React from 'react'
 import { MyUserResponseFragment, useMeQuery } from 'src/generated/graphql'
 import { clear, del, get, set, storageKeys } from 'src/utils/storage'
@@ -44,6 +46,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, onLogin }) => {
   const setUserWrapper = (user: MyUserResponseFragment | undefined) => {
     setUser(user)
     setUserToken(user?.token)
+    Sentry.setUser(pick(user, ['id', 'name', 'isSuperadmin']))
     if (onLogin) {
       onLogin(user)
     }
