@@ -4,7 +4,7 @@
   "description": "PostFoo is project for tracking personal finance",
   "main": "build/dist/index.js",
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -36,6 +36,7 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-tabs": "^1.1.2",
     "@radix-ui/react-toast": "^1.2.4",
+    "@sentry/nextjs": "^8.50.0",
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/react-table": "^8.20.6",
     "class-variance-authority": "^0.7.1",
