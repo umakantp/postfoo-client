@@ -1,6 +1,6 @@
 'use client'
 
-import Sentry from '@sentry/nextjs'
+import * as Sentry from '@sentry/nextjs'
 import { pick } from 'lodash'
 import * as React from 'react'
 import { MyUserResponseFragment, useMeQuery } from 'src/generated/graphql'

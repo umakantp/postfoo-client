@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
-
-import Sentry, { SeverityLevel } from '@sentry/nextjs'
+import * as Sentry from '@sentry/nextjs'
 import { compact, isError, isString } from 'lodash'
 
 const now = () => {
@@ -36,7 +35,7 @@ const logger = {
   warn: (...args: any[]) => {
     console.warn(now(), '[WARN]', ...args)
     const message = getMessage(args)
-    Sentry.captureMessage(message, 'warning' as SeverityLevel)
+    Sentry.captureMessage(message, 'warning' as Sentry.SeverityLevel)
   },
 
   error: (...args: any[]) => {
