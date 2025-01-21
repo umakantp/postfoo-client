@@ -9,6 +9,8 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
     concurrency:
       group: ${{ github.ref }}
       cancel-in-progress: true
