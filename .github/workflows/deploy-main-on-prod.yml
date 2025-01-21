@@ -24,13 +24,16 @@ jobs:
           NEXT_PUBLIC_MODE=prod
           NEXT_PUBLIC_RELEASE=$(git rev-parse --short HEAD)
           NEXT_PUBLIC_RELEASE_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          NEXT_PUBLIC_API_URL=https://gql.postfoo.com
           NEXT_PUBLIC_GRAPHQLAPI_URL=https://gql.postfoo.com/api
+          NEXT_PUBLIC_SENTRY_DSN=https://f667ce067342815daa5a8cbd688ba706@o4508675017474048.ingest.us.sentry.io/4508675021864961
           " > .env
           cat .env
 
       - name: Add environment variables to Github
         run: |
           echo "MODE=prod" >> $GITHUB_ENV
+          echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> $GITHUB_ENV
 
       - uses: actions/setup-node@v4
         with:
