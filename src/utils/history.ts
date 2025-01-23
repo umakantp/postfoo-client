@@ -10,7 +10,7 @@ import { removeTrailingSlash } from 'src/utils/utils'
 // UrlParams are the parameters that are passed to the route /profiles/(:id)
 // Keep it as `type` instead of `interface` to make it work with
 // useParams of React Router DOM.
-export type UrlParams = {
+export interface UrlParams {
   userId?: string,
   portfolioId?: string,
 }

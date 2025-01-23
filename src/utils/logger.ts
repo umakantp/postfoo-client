@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 import * as Sentry from '@sentry/nextjs'
 import { compact, isError, isString } from 'lodash'
 

@@ -30,8 +30,8 @@ export const useHoneypot = () => {
 }
 
 export const HoneypotInputs: React.FC<HoneypotInputsProps> = ({ label = 'Please leave this field blank'}) => {
-  let context = React.useContext(HoneypotContext)
-  let {
+  const context = React.useContext(HoneypotContext)
+  const {
     nameFieldName = HONEYPOT_DEFAULT_NAME_FIELD_NAME,
     validFromFieldName = HONEYPOT_DEFAULT_VALID_FROM_FIELD_NAME,
     encryptedValidFrom,

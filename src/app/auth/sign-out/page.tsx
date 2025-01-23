@@ -16,7 +16,7 @@ const Page: React.FC = () => {
       setUser(undefined)
       hardRedirect(routes.SIGN_IN)
     }, 3000)
-  }, [])
+  }, [setUser])
   return (
     <Spinner size="large" />
   )

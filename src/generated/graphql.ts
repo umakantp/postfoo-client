@@ -4,14 +4,14 @@ import * as Apollo from '@apollo/client'
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache'
 export type Maybe<T> = T | undefined
 export type InputMaybe<T> = T | undefined
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
+export type Exact<T extends Record<string, unknown>> = { [K in keyof T]: T[K] }
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never }
+export type MakeEmpty<T extends Record<string, unknown>, K extends keyof T> = Partial<Record<K, never>>
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never }
 const defaultOptions = {} as const
 /** All built-in and custom scalars, mapped to their actual values */
-export type Scalars = {
+export interface Scalars {
   ID: { input: string, output: string },
   String: { input: string, output: string },
   Boolean: { input: boolean, output: boolean },
@@ -39,7 +39,7 @@ export type Code = Node & {
   user: User,
 }
 
-export type CreateFundInput = {
+export interface CreateFundInput {
   category?: InputMaybe<FundCategory>,
   description?: InputMaybe<Scalars['String']['input']>,
   lastNav: Scalars['Float']['input'],
@@ -50,27 +50,27 @@ export type CreateFundInput = {
   type?: InputMaybe<FundType>,
 }
 
-export type CreatePortfolioFundInput = {
+export interface CreatePortfolioFundInput {
   cost: Scalars['Float']['input'],
   fundId: Scalars['ID']['input'],
   portfolioId: Scalars['ID']['input'],
   units: Scalars['Float']['input'],
 }
 
-export type CreatePortfolioInput = {
+export interface CreatePortfolioInput {
   description?: InputMaybe<Scalars['String']['input']>,
   name: Scalars['String']['input'],
 }
 
-export type DeleteFundInput = {
+export interface DeleteFundInput {
   fundId: Scalars['ID']['input'],
 }
 
-export type DeletePortfolioFundInput = {
+export interface DeletePortfolioFundInput {
   portfolioFundId: Scalars['ID']['input'],
 }
 
-export type DeletePortfolioInput = {
+export interface DeletePortfolioInput {
   portfolioId: Scalars['ID']['input'],
 }
 
@@ -90,7 +90,7 @@ export enum ErrorCode {
   UNAUTHENTICATED = 'UNAUTHENTICATED'
 }
 
-export type ForgotPasswordInput = {
+export interface ForgotPasswordInput {
   from__confirm?: InputMaybe<Scalars['String']['input']>,
   mobile: Scalars['PhoneNumber']['input'],
   name__confirm?: InputMaybe<Scalars['String']['input']>,
@@ -198,7 +198,7 @@ export enum FundType {
   IDCW_YEARLY_REINVESTMENT = 'IDCW_YEARLY_REINVESTMENT'
 }
 
-export type FundsInput = {
+export interface FundsInput {
   category?: InputMaybe<FundCategory>,
   page?: InputMaybe<PageInput>,
   plan?: InputMaybe<FundPlan>,
@@ -207,7 +207,7 @@ export type FundsInput = {
 }
 
 export type FundsPayload = PagePayload & {
-  nodes: Array<Fund>,
+  nodes: Fund[],
   pageInfo: PageInfo,
   total: Scalars['Int']['output'],
 }
@@ -221,7 +221,7 @@ export type Membership = Node & {
   user: User,
 }
 
-export type Mutation = {
+export interface Mutation {
   createFund: Fund,
   createPortfolio: Portfolio,
   createPortfolioFund: PortfolioFund,
@@ -240,94 +240,94 @@ export type Mutation = {
 }
 
 
-export type MutationCreateFundArgs = {
+export interface MutationCreateFundArgs {
   input: CreateFundInput,
 }
 
 
-export type MutationCreatePortfolioArgs = {
+export interface MutationCreatePortfolioArgs {
   input: CreatePortfolioInput,
 }
 
 
-export type MutationCreatePortfolioFundArgs = {
+export interface MutationCreatePortfolioFundArgs {
   input: CreatePortfolioFundInput,
 }
 
 
-export type MutationDeleteFundArgs = {
+export interface MutationDeleteFundArgs {
   input: DeleteFundInput,
 }
 
 
-export type MutationDeletePortfolioArgs = {
+export interface MutationDeletePortfolioArgs {
   input: DeletePortfolioInput,
 }
 
 
-export type MutationDeletePortfolioFundArgs = {
+export interface MutationDeletePortfolioFundArgs {
   input: DeletePortfolioFundInput,
 }
 
 
-export type MutationForgotPasswordArgs = {
+export interface MutationForgotPasswordArgs {
   input: ForgotPasswordInput,
 }
 
 
-export type MutationResendCodeArgs = {
+export interface MutationResendCodeArgs {
   input: ResendCodeInput,
 }
 
 
-export type MutationResetPasswordArgs = {
+export interface MutationResetPasswordArgs {
   input: ResetPasswordInput,
 }
 
 
-export type MutationSignInArgs = {
+export interface MutationSignInArgs {
   input: SignInInput,
 }
 
 
-export type MutationSignUpArgs = {
+export interface MutationSignUpArgs {
   input: SignUpInput,
 }
 
 
-export type MutationUpdateFundArgs = {
+export interface MutationUpdateFundArgs {
   input: UpdateFundInput,
 }
 
 
-export type MutationUpdatePortfolioArgs = {
+export interface MutationUpdatePortfolioArgs {
   input: UpdatePortfolioInput,
 }
 
 
-export type MutationUpdatePortfolioFundArgs = {
+export interface MutationUpdatePortfolioFundArgs {
   input: UpdatePortfolioFundInput,
 }
 
 
-export type MutationVerifyCodeArgs = {
+export interface MutationVerifyCodeArgs {
   input: VerifyCodeInput,
 }
 
-export type Node = {
+export interface Node {
   createdAt: Scalars['DateTime']['output'],
   id: Scalars['ID']['output'],
   updatedAt: Scalars['DateTime']['output'],
 }
 
-export type PageInfo = {
+export interface PageInfo {
   endCursor?: Maybe<Scalars['String']['output']>,
   hasNextPage: Scalars['Boolean']['output'],
   hasPreviousPage: Scalars['Boolean']['output'],
   startCursor?: Maybe<Scalars['String']['output']>,
 }
 
-export type PageInput = {
+export interface PageInput {
   /**  Cursor-based pagination, load after this cursor  */
   after?: InputMaybe<Scalars['String']['input']>,
   /**  How many to load (from the start), supports 0 for getting the `total`  */
@@ -338,8 +338,8 @@ export type PageInput = {
   offset?: InputMaybe<Scalars['Int']['input']>,
 }
 
-export type PagePayload = {
-  nodes: Array<Node>,
+export interface PagePayload {
+  nodes: Node[],
   pageInfo: PageInfo,
   total: Scalars['Int']['output'],
 }
@@ -347,9 +347,9 @@ export type PagePayload = {
 export type Portfolio = Node & {
   createdAt: Scalars['DateTime']['output'],
   description?: Maybe<Scalars['String']['output']>,
-  funds: Array<PortfolioFund>,
+  funds: PortfolioFund[],
   id: Scalars['ID']['output'],
-  members: Array<Membership>,
+  members: Membership[],
   name: Scalars['String']['output'],
   updatedAt: Scalars['DateTime']['output'],
 }
@@ -364,18 +364,18 @@ export type PortfolioFund = Node & {
   updatedAt: Scalars['DateTime']['output'],
 }
 
-export type PortfolioFundsInput = {
+export interface PortfolioFundsInput {
   page?: InputMaybe<PageInput>,
   portfolioId: Scalars['ID']['input'],
 }
 
 export type PortfolioFundsPayload = PagePayload & {
-  nodes: Array<PortfolioFund>,
+  nodes: PortfolioFund[],
   pageInfo: PageInfo,
   total: Scalars['Int']['output'],
 }
 
-export type Query = {
+export interface Query {
   add?: Maybe<Scalars['Int']['output']>,
   fund: Fund,
   funds: FundsPayload,
@@ -386,44 +386,44 @@ export type Query = {
 }
 
 
-export type QueryAddArgs = {
+export interface QueryAddArgs {
   x?: InputMaybe<Scalars['Int']['input']>,
   y?: InputMaybe<Scalars['Int']['input']>,
 }
 
 
-export type QueryFundArgs = {
+export interface QueryFundArgs {
   fundId: Scalars['ID']['input'],
 }
 
 
-export type QueryFundsArgs = {
+export interface QueryFundsArgs {
   input?: InputMaybe<FundsInput>,
 }
 
 
-export type QueryPortfolioArgs = {
+export interface QueryPortfolioArgs {
   portfolioId: Scalars['ID']['input'],
 }
 
 
-export type QueryPortfolioFundArgs = {
+export interface QueryPortfolioFundArgs {
   portfolioFundId: Scalars['ID']['input'],
 }
 
 
-export type QueryPortfolioFundsArgs = {
+export interface QueryPortfolioFundsArgs {
   input: PortfolioFundsInput,
 }
 
-export type ResendCodeInput = {
+export interface ResendCodeInput {
   from__confirm?: InputMaybe<Scalars['String']['input']>,
   mobile?: InputMaybe<Scalars['PhoneNumber']['input']>,
   name__confirm?: InputMaybe<Scalars['String']['input']>,
   userId?: InputMaybe<Scalars['ID']['input']>,
 }
 
-export type ResetPasswordInput = {
+export interface ResetPasswordInput {
   code: Scalars['ID']['input'],
   from__confirm?: InputMaybe<Scalars['String']['input']>,
   mobile: Scalars['PhoneNumber']['input'],
@@ -431,25 +431,25 @@ export type ResetPasswordInput = {
   password: Scalars['ID']['input'],
 }
 
-export type SignInInput = {
+export interface SignInInput {
   from__confirm?: InputMaybe<Scalars['String']['input']>,
   mobile: Scalars['PhoneNumber']['input'],
   name__confirm?: InputMaybe<Scalars['String']['input']>,
   password: Scalars['ID']['input'],
 }
 
-export type SignUpInput = {
+export interface SignUpInput {
   firstName: Scalars['ID']['input'],
   lastName?: InputMaybe<Scalars['ID']['input']>,
   mobile: Scalars['PhoneNumber']['input'],
   password: Scalars['ID']['input'],
 }
 
-export type SuccessPayload = {
+export interface SuccessPayload {
   error?: Maybe<ErrorCode>,
 }
 
-export type UpdateFundInput = {
+export interface UpdateFundInput {
   category?: InputMaybe<FundCategory>,
   description?: InputMaybe<Scalars['String']['input']>,
   fundId: Scalars['ID']['input'],
@@ -461,27 +461,27 @@ export type UpdateFundInput = {
   type?: InputMaybe<FundType>,
 }
 
-export type UpdatePortfolioFundInput = {
+export interface UpdatePortfolioFundInput {
   cost?: InputMaybe<Scalars['Float']['input']>,
   portfolioFundId: Scalars['ID']['input'],
   units?: InputMaybe<Scalars['Float']['input']>,
 }
 
-export type UpdatePortfolioInput = {
+export interface UpdatePortfolioInput {
   description?: InputMaybe<Scalars['String']['input']>,
   name?: InputMaybe<Scalars['String']['input']>,
   portfolioId: Scalars['ID']['input'],
 }
 
 export type User = Node & {
-  codes: Array<Code>,
+  codes: Code[],
   createdAt: Scalars['DateTime']['output'],
   firstName: Scalars['ID']['output'],
   id: Scalars['ID']['output'],
   isBlocked: Scalars['Boolean']['output'],
   isVerified: Scalars['Boolean']['output'],
   lastName?: Maybe<Scalars['ID']['output']>,
-  memberships: Array<Membership>,
+  memberships: Membership[],
   mobile: Scalars['PhoneNumber']['output'],
   /**  The generated full (first+last) name  */
   name: Scalars['ID']['output'],
@@ -503,7 +503,7 @@ export enum UserStatus {
   User = 'User'
 }
 
-export type VerifyCodeInput = {
+export interface VerifyCodeInput {
   code: Scalars['ID']['input'],
   from__confirm?: InputMaybe<Scalars['String']['input']>,
   mobile?: InputMaybe<Scalars['PhoneNumber']['input']>,
@@ -511,99 +511,99 @@ export type VerifyCodeInput = {
   userId?: InputMaybe<Scalars['ID']['input']>,
 }
 
-export type FundResponseFragment = { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number }
+export interface FundResponseFragment { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number }
 
-export type PageInfoResponseFragment = { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined }
+export interface PageInfoResponseFragment { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined }
 
-export type PortfolioResponseFragment = { id: string, name: string, description?: string | undefined }
+export interface PortfolioResponseFragment { id: string, name: string, description?: string | undefined }
 
-export type PortfolioFundResponseFragment = { id: string, units: number, cost: number, fund: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number } }
+export interface PortfolioFundResponseFragment { id: string, units: number, cost: number, fund: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number } }
 
-export type MyUserResponseFragment = { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean, memberships: Array<{ id: string, role: UserRole, portfolio: { id: string, name: string } }> }
+export interface MyUserResponseFragment { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean, memberships: { id: string, role: UserRole, portfolio: { id: string, name: string } }[] }
 
-export type GuestUserResponseFragment = { id: string }
+export interface GuestUserResponseFragment { id: string }
 
 export type SignInMutationVariables = Exact<{
   input: SignInInput,
 }>
 
 
-export type SignInMutation = { signIn: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean, memberships: Array<{ id: string, role: UserRole, portfolio: { id: string, name: string } }> } }
+export interface SignInMutation { signIn: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean, memberships: { id: string, role: UserRole, portfolio: { id: string, name: string } }[] } }
 
 export type SignUpMutationVariables = Exact<{
   input: SignUpInput,
 }>
 
 
-export type SignUpMutation = { signUp: { id: string } }
+export interface SignUpMutation { signUp: { id: string } }
 
 export type VerifyCodeMutationVariables = Exact<{
   input: VerifyCodeInput,
 }>
 
 
-export type VerifyCodeMutation = { verifyCode: { error?: ErrorCode | undefined } }
+export interface VerifyCodeMutation { verifyCode: { error?: ErrorCode | undefined } }
 
 export type ResendCodeMutationVariables = Exact<{
   input: ResendCodeInput,
 }>
 
 
-export type ResendCodeMutation = { resendCode: { error?: ErrorCode | undefined } }
+export interface ResendCodeMutation { resendCode: { error?: ErrorCode | undefined } }
 
 export type ForgotPasswordMutationVariables = Exact<{
   input: ForgotPasswordInput,
 }>
 
 
-export type ForgotPasswordMutation = { forgotPassword: { error?: ErrorCode | undefined } }
+export interface ForgotPasswordMutation { forgotPassword: { error?: ErrorCode | undefined } }
 
 export type ResetPasswordMutationVariables = Exact<{
   input: ResetPasswordInput,
 }>
 
 
-export type ResetPasswordMutation = { resetPassword: { error?: ErrorCode | undefined } }
+export interface ResetPasswordMutation { resetPassword: { error?: ErrorCode | undefined } }
 
 export type CreatePortfolioMutationVariables = Exact<{
   input: CreatePortfolioInput,
 }>
 
 
-export type CreatePortfolioMutation = { createPortfolio: { id: string } }
+export interface CreatePortfolioMutation { createPortfolio: { id: string } }
 
 export type CreatePortfolioFundMutationVariables = Exact<{
   input: CreatePortfolioFundInput,
 }>
 
 
-export type CreatePortfolioFundMutation = { createPortfolioFund: { id: string, units: number, cost: number, fund: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number } } }
+export interface CreatePortfolioFundMutation { createPortfolioFund: { id: string, units: number, cost: number, fund: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number } } }
 
-export type MeQueryVariables = Exact<{ [key: string]: never }>
+export type MeQueryVariables = Exact<Record<string, never>>
 
 
-export type MeQuery = { me?: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean, memberships: Array<{ id: string, role: UserRole, portfolio: { id: string, name: string } }> } | undefined }
+export interface MeQuery { me?: { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean, memberships: { id: string, role: UserRole, portfolio: { id: string, name: string } }[] } | undefined }
 
 export type FundsQueryVariables = Exact<{
   input?: InputMaybe<FundsInput>,
 }>
 
 
-export type FundsQuery = { funds: { nodes: Array<{ id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number }>, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined } } }
+export interface FundsQuery { funds: { nodes: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number }[], pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined } } }
 
 export type PortfolioQueryVariables = Exact<{
   portfolioId: Scalars['ID']['input'],
 }>
 
 
-export type PortfolioQuery = { portfolio: { id: string, name: string, description?: string | undefined } }
+export interface PortfolioQuery { portfolio: { id: string, name: string, description?: string | undefined } }
 
 export type PortfolioFundsQueryVariables = Exact<{
   input: PortfolioFundsInput,
 }>
 
 
-export type PortfolioFundsQuery = { portfolioFunds: { nodes: Array<{ id: string, units: number, cost: number, fund: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number } }>, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined } } }
+export interface PortfolioFundsQuery { portfolioFunds: { nodes: { id: string, units: number, cost: number, fund: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number } }[], pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined } } }
 
 export const PageInfoResponseFragmentDoc = gql`
     fragment PageInfoResponse on PageInfo {
@@ -1103,7 +1103,7 @@ export type PortfolioFundsLazyQueryHookResult = ReturnType<typeof usePortfolioFu
 export type PortfolioFundsSuspenseQueryHookResult = ReturnType<typeof usePortfolioFundsSuspenseQuery>
 export type PortfolioFundsQueryResult = Apollo.QueryResult<PortfolioFundsQuery, PortfolioFundsQueryVariables>
 export type CodeKeySpecifier = ('code' | 'createdAt' | 'expireAt' | 'id' | 'updatedAt' | 'user' | CodeKeySpecifier)[]
-export type CodeFieldPolicy = {
+export interface CodeFieldPolicy {
   code?: FieldPolicy<any> | FieldReadFunction<any>,
   createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
   expireAt?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1112,7 +1112,7 @@ export type CodeFieldPolicy = {
   user?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type FundKeySpecifier = ('category' | 'createdAt' | 'description' | 'id' | 'lastNav' | 'name' | 'plan' | 'symbol1' | 'symbol2' | 'type' | 'updatedAt' | FundKeySpecifier)[]
-export type FundFieldPolicy = {
+export interface FundFieldPolicy {
   category?: FieldPolicy<any> | FieldReadFunction<any>,
   createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
   description?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1126,13 +1126,13 @@ export type FundFieldPolicy = {
   updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type FundsPayloadKeySpecifier = ('nodes' | 'pageInfo' | 'total' | FundsPayloadKeySpecifier)[]
-export type FundsPayloadFieldPolicy = {
+export interface FundsPayloadFieldPolicy {
   nodes?: FieldPolicy<any> | FieldReadFunction<any>,
   pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
   total?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type MembershipKeySpecifier = ('createdAt' | 'id' | 'portfolio' | 'role' | 'updatedAt' | 'user' | MembershipKeySpecifier)[]
-export type MembershipFieldPolicy = {
+export interface MembershipFieldPolicy {
   createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
   id?: FieldPolicy<any> | FieldReadFunction<any>,
   portfolio?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1141,7 +1141,7 @@ export type MembershipFieldPolicy = {
   user?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type MutationKeySpecifier = ('createFund' | 'createPortfolio' | 'createPortfolioFund' | 'deleteFund' | 'deletePortfolio' | 'deletePortfolioFund' | 'forgotPassword' | 'resendCode' | 'resetPassword' | 'signIn' | 'signUp' | 'updateFund' | 'updatePortfolio' | 'updatePortfolioFund' | 'verifyCode' | MutationKeySpecifier)[]
-export type MutationFieldPolicy = {
+export interface MutationFieldPolicy {
   createFund?: FieldPolicy<any> | FieldReadFunction<any>,
   createPortfolio?: FieldPolicy<any> | FieldReadFunction<any>,
   createPortfolioFund?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1159,26 +1159,26 @@ export type MutationFieldPolicy = {
   verifyCode?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type NodeKeySpecifier = ('createdAt' | 'id' | 'updatedAt' | NodeKeySpecifier)[]
-export type NodeFieldPolicy = {
+export interface NodeFieldPolicy {
   createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
   id?: FieldPolicy<any> | FieldReadFunction<any>,
   updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type PageInfoKeySpecifier = ('endCursor' | 'hasNextPage' | 'hasPreviousPage' | 'startCursor' | PageInfoKeySpecifier)[]
-export type PageInfoFieldPolicy = {
+export interface PageInfoFieldPolicy {
   endCursor?: FieldPolicy<any> | FieldReadFunction<any>,
   hasNextPage?: FieldPolicy<any> | FieldReadFunction<any>,
   hasPreviousPage?: FieldPolicy<any> | FieldReadFunction<any>,
   startCursor?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type PagePayloadKeySpecifier = ('nodes' | 'pageInfo' | 'total' | PagePayloadKeySpecifier)[]
-export type PagePayloadFieldPolicy = {
+export interface PagePayloadFieldPolicy {
   nodes?: FieldPolicy<any> | FieldReadFunction<any>,
   pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
   total?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type PortfolioKeySpecifier = ('createdAt' | 'description' | 'funds' | 'id' | 'members' | 'name' | 'updatedAt' | PortfolioKeySpecifier)[]
-export type PortfolioFieldPolicy = {
+export interface PortfolioFieldPolicy {
   createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
   description?: FieldPolicy<any> | FieldReadFunction<any>,
   funds?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1188,7 +1188,7 @@ export type PortfolioFieldPolicy = {
   updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type PortfolioFundKeySpecifier = ('cost' | 'createdAt' | 'fund' | 'id' | 'portfolio' | 'units' | 'updatedAt' | PortfolioFundKeySpecifier)[]
-export type PortfolioFundFieldPolicy = {
+export interface PortfolioFundFieldPolicy {
   cost?: FieldPolicy<any> | FieldReadFunction<any>,
   createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
   fund?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1198,13 +1198,13 @@ export type PortfolioFundFieldPolicy = {
   updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type PortfolioFundsPayloadKeySpecifier = ('nodes' | 'pageInfo' | 'total' | PortfolioFundsPayloadKeySpecifier)[]
-export type PortfolioFundsPayloadFieldPolicy = {
+export interface PortfolioFundsPayloadFieldPolicy {
   nodes?: FieldPolicy<any> | FieldReadFunction<any>,
   pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
   total?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type QueryKeySpecifier = ('add' | 'fund' | 'funds' | 'me' | 'portfolio' | 'portfolioFund' | 'portfolioFunds' | QueryKeySpecifier)[]
-export type QueryFieldPolicy = {
+export interface QueryFieldPolicy {
   add?: FieldPolicy<any> | FieldReadFunction<any>,
   fund?: FieldPolicy<any> | FieldReadFunction<any>,
   funds?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1214,11 +1214,11 @@ export type QueryFieldPolicy = {
   portfolioFunds?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type SuccessPayloadKeySpecifier = ('error' | SuccessPayloadKeySpecifier)[]
-export type SuccessPayloadFieldPolicy = {
+export interface SuccessPayloadFieldPolicy {
   error?: FieldPolicy<any> | FieldReadFunction<any>,
 }
 export type UserKeySpecifier = ('codes' | 'createdAt' | 'firstName' | 'id' | 'isBlocked' | 'isVerified' | 'lastName' | 'memberships' | 'mobile' | 'name' | 'password' | 'salt' | 'status' | 'token' | 'updatedAt' | UserKeySpecifier)[]
-export type UserFieldPolicy = {
+export interface UserFieldPolicy {
   codes?: FieldPolicy<any> | FieldReadFunction<any>,
   createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
   firstName?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -1235,7 +1235,7 @@ export type UserFieldPolicy = {
   token?: FieldPolicy<any> | FieldReadFunction<any>,
   updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 }
-export type StrictTypedTypePolicies = {
+export interface StrictTypedTypePolicies {
   Code?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | CodeKeySpecifier | (() => undefined | CodeKeySpecifier),
     fields?: CodeFieldPolicy,

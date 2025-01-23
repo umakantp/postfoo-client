@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const Page: React.FC = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center justify-center h-full">
       <div className="flex items-center justify-between px-2">
         <div className="grid gap-1">
           <h1 className="font-heading text-5xl text-center">Your Personal Investment Tracker</h1>

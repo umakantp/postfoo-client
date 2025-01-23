@@ -16,6 +16,7 @@ export const set = <T>(key: string, value: T) => {
   try {
     localStorage.setItem(key, JSON.stringify(value))
   } catch {
+    // do nothing
   }
 }
 
@@ -23,12 +24,14 @@ export const del = (key: string) => {
   try {
     localStorage.removeItem(key)
   } catch {
+    // do nothing
   }
 }
 
 export const clear = () => {
   try {
-    localStorage.clear
+    localStorage.clear()
   } catch {
+    // do nothing
   }
 }

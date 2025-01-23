@@ -36,14 +36,14 @@ interface AuthProviderProps {
 const AuthProvider: React.FC<AuthProviderProps> = ({ children, onLogin }) => {
   const [user, setUser] = React.useState<MyUserResponseFragment | undefined>()
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
-  const setUserToken = (token: string | undefined) => {
+  const setUserToken = React.useCallback((token: string | undefined) => {
     if (token) {
       set(storageKeys.AUTH_TOKEN, token)
     } else {
       del(storageKeys.AUTH_TOKEN)
     }
-  }
-  const setUserWrapper = (user: MyUserResponseFragment | undefined) => {
+  }, [])
+  const setUserWrapper = React.useCallback((user: MyUserResponseFragment | undefined) => {
     setUser(user)
     setUserToken(user?.token)
     Sentry.setUser(pick(user, ['id', 'name', 'isSuperadmin']))
@@ -54,7 +54,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, onLogin }) => {
       // Removing user, lets clear all local storage.
       clear()
     }
-  }
+  }, [setUser, setUserToken, onLogin])
+
   const { data, error } = useMeQuery()
 
   React.useEffect(() => {

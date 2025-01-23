@@ -19,7 +19,7 @@ const LayoutMain: React.FC<LayoutMainProps> = ({ children }) => {
       </header>
       {!isAuthRoute && <div className="container grid flex-1 gap-12">
         <main className="flex w-full flex-1 flex-col overflow-hidden">
-          <div className="md:container">
+          <div className="md:container h-full">
             {children}
           </div>
         </main>

@@ -12,7 +12,11 @@ export const errorLink = onError((data) => {
     let forbidden = false
     data.graphQLErrors.forEach(({ extensions, message }) => {
       const code = extensions?.code
-      code ? logger.error(message, { code }) : logger.error(message)
+      if (code) {
+        logger.error(message, { code })
+      } else {
+        logger.error(message)
+      }
       if (code === ErrorCode.UNAUTHENTICATED || code === ErrorCode.METHOD_NOT_ALLOWED) {
         accessDenied = true
       }

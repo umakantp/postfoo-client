@@ -7,7 +7,7 @@ import { Route, routes } from 'src/utils/constants'
 import { useIsHrefActive } from 'src/utils/history'
 import { cn } from 'src/utils/utils'
 
-export type MenuItem = {
+export interface MenuItem {
   title: string,
   href: Route,
 }

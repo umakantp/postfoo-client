@@ -125,7 +125,7 @@ export const reducer = (state: State, action: Action): State => {
   }
 }
 
-const listeners: Array<(state: State) => void> = []
+const listeners: ((state: State) => void)[] = []
 
 let memoryState: State = { toasts: [] }
 
@@ -136,6 +136,7 @@ function dispatch(action: Action) {
   })
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Toast extends Omit<ToasterToast, 'id'> {}
 
 function toast({ ...props }: Toast) {
