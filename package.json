@@ -9,9 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "npm run lint -- --fix",
-    "lint:codegen": "eslint ./src/generated/graphql.ts --fix",
     "test": "exit 1",
-    "codegen": "graphql-codegen --config codegen.yml && npm run lint:codegen",
+    "codegen": "graphql-codegen --config codegen.yml",
     "typecheck": "tsc --noEmit --extendedDiagnostics"
   },
   "repository": {
