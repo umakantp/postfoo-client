@@ -36,7 +36,7 @@ const generatePath = (pathname: string, query?: UrlParams, hash?: string | null 
   asPath = removeTrailingSlash(asPath)
 
   // Append remaining query as a querystring, if needed:
-  const qs = stringify(remainingQuery)
+  const qs = stringify(remainingQuery as Record<string, string>)
   if (qs) {
     asPath += `?${qs}`
   }
