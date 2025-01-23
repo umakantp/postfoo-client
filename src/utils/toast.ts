@@ -13,8 +13,8 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement,
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const actionTypes = {
+
+const _actionTypes = {
   ADD_TOAST: 'ADD_TOAST',
   UPDATE_TOAST: 'UPDATE_TOAST',
   DISMISS_TOAST: 'DISMISS_TOAST',
@@ -28,7 +28,7 @@ function genId() {
   return count.toString()
 }
 
-type ActionType = typeof actionTypes
+type ActionType = typeof _actionTypes
 
 type Action =
   | {
@@ -136,7 +136,6 @@ function dispatch(action: Action) {
   })
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Toast extends Omit<ToasterToast, 'id'> {}
 
 function toast({ ...props }: Toast) {
