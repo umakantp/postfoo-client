@@ -20,7 +20,6 @@ interface LayoutAppProps {
 
 const LayoutApp: React.FC<LayoutAppProps> = ({ children , honeypotInputs}) => {
   const queryClient = new QueryClient()
-
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

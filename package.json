@@ -11,7 +11,8 @@
     "lint:fix": "npm run lint -- --fix",
     "test": "exit 1",
     "codegen": "graphql-codegen --config codegen.yml",
-    "typecheck": "tsc --noEmit --extendedDiagnostics"
+    "typecheck": "tsc --noEmit --extendedDiagnostics",
+    "supportedBrowsers": "npx update-browserslist-db@latest; echo \"export default $(browserslist-useragent-regexp --allowHigherVersions)\" > src/utils/supported-browsers.ts"
   },
   "repository": {
     "type": "git",
@@ -68,6 +69,7 @@
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
     "autoprefixer": "^10.4.20",
+    "browserslist-useragent-regexp": "^4.1.3",
     "eslint": "^9.18.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "globals": "^15.14.0",
