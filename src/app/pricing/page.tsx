@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import * as React from 'react'
-import PricingPlans from 'src/components/pricing-plants'
+import PricingPlans from 'src/components/pricing-plans'
 
 export const metadata: Metadata = {
   title: 'PostFoo - Track your investments',
