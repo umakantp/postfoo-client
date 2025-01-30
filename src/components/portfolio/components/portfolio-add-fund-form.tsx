@@ -30,7 +30,8 @@ interface PortfolioAddFundFormProps {
 }
 
 const PortfolioAddFundForm: React.FC<PortfolioAddFundFormProps> = ({ portfolioId, setShowAddFundDialog }) => {
-  const [createPortfolioFund] = useCreatePortfolioFundMutation()
+  const createPortfolioFund = useCreatePortfolioFundMutation()
+
   const form = useForm<PortfolioAddFundFormValues>({
     resolver: zodResolver(portfolioAddFundFormSchema),
     defaultValues,
@@ -41,17 +42,15 @@ const PortfolioAddFundForm: React.FC<PortfolioAddFundFormProps> = ({ portfolioId
 
   const onSubmit = async (data: PortfolioAddFundFormValues) => {
     try {
-      const createPortfolioFundResult = await createPortfolioFund({
-        variables: {
-          input: {
-            fundId: data.fundId,
-            cost: data.cost,
-            portfolioId,
-            units: data.units,
-          },
+      const createPortfolioFundResult = await createPortfolioFund.mutateAsync({
+        input: {
+          fundId: data.fundId,
+          cost: data.cost,
+          portfolioId,
+          units: data.units,
         },
       })
-      if (createPortfolioFundResult.data) {
+      if (createPortfolioFundResult.createPortfolioFund) {
         return setShowAddFundDialog(false)
       }
     } catch (error: any) {

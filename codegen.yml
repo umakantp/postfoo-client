@@ -31,5 +31,9 @@ generates:
             - "/* eslint-disable */"
       - typescript
       - typescript-operations
-      - typescript-react-apollo
-      - typescript-apollo-client-helpers
+      - typescript-react-query
+    config:
+      fetcher: {
+        func: 'src/utils/react-query-fetcher#reactQueryFetcher',
+        isReactHook: false
+      }

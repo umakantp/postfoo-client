@@ -30,12 +30,12 @@ export const useAuth = () => {
 
 interface AuthProviderProps {
   children: React.ReactNode,
-  onLogin?: (user: MyUserResponseFragment | undefined) => void,
 }
 
-const AuthProvider: React.FC<AuthProviderProps> = ({ children, onLogin }) => {
+const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = React.useState<MyUserResponseFragment | undefined>()
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
+
   const setUserToken = React.useCallback((token: string | undefined) => {
     if (token) {
       set(storageKeys.AUTH_TOKEN, token)
@@ -43,18 +43,16 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, onLogin }) => {
       del(storageKeys.AUTH_TOKEN)
     }
   }, [])
+
   const setUserWrapper = React.useCallback((user: MyUserResponseFragment | undefined) => {
     setUser(user)
     setUserToken(user?.token)
     Sentry.setUser(pick(user, ['id', 'name', 'isSuperadmin']))
-    if (onLogin) {
-      onLogin(user)
-    }
     if (!user) {
       // Removing user, lets clear all local storage.
       clear()
     }
-  }, [setUser, setUserToken, onLogin])
+  }, [setUser, setUserToken])
 
   const { data, error } = useMeQuery()
 

@@ -40,23 +40,23 @@ const ForgotPasswordResetForm: React.FC<ForgotPasswordResetFormProps> = ({ mobil
       mobile: mobile,
     },
   })
-  const [resetPassword, { loading: isLoading }] = useResetPasswordMutation({ fetchPolicy: 'no-cache' })
+  const resetPassword = useResetPasswordMutation()
+  const isLoading = resetPassword.isPending
+
   const navigate = useNavigation()
 
   async function onSubmit(data: FormData) {
     try {
-      const resetPasswordResult = await resetPassword({
-        variables: {
-          input: {
-            mobile: mobile,
-            code: data.code,
-            password: data.password,
-            ...getHoneypotFormValues(data),
-          },
+      const resetPasswordResult = await resetPassword.mutateAsync({
+        input: {
+          mobile: mobile,
+          code: data.code,
+          password: data.password,
+          ...getHoneypotFormValues(data),
         },
       })
 
-      if (resetPasswordResult.data) {
+      if (!resetPasswordResult.resetPassword.error) {
         toast({ variant: 'success', description: 'Password reset successful. Taking you to sign in.' })
         navigate('SIGN_IN')
       }

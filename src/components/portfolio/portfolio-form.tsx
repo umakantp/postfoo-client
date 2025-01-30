@@ -22,7 +22,7 @@ const defaultValues: Partial<PortfolioFormValues> = {
 }
 
 const PortfolioForm: React.FC = () => {
-  const [createPortfolio] = useCreatePortfolioMutation()
+  const createPortfolio = useCreatePortfolioMutation()
   const navigate = useNavigation()
   const form = useForm<PortfolioFormValues>({
     resolver: zodResolver(portfolioFormSchema),
@@ -32,16 +32,14 @@ const PortfolioForm: React.FC = () => {
 
   const onSubmit = async (data: PortfolioFormValues) => {
     try {
-      const createPortfolioResult = await createPortfolio({
-        variables: {
-          input: {
-            name: data.name,
-            description: data.description,
-          },
+      const createPortfolioResult = await createPortfolio.mutateAsync({
+        input: {
+          name: data.name,
+          description: data.description,
         },
       })
-      if (createPortfolioResult.data) {
-        const portfolio = createPortfolioResult.data.createPortfolio
+      if (createPortfolioResult.createPortfolio) {
+        const portfolio = createPortfolioResult.createPortfolio
         return navigate('PORTFOLIO_DETAIL', { portfolioId: portfolio.id }, { })
       }
     } catch (error: any) {

@@ -29,24 +29,23 @@ const SignUpForm: React.FC = () => {
   } = useForm<FormData>({
     resolver: zodResolver(signupSchema),
   })
-  const [signUp, { loading: isLoading }] = useSignUpMutation({ fetchPolicy: 'no-cache' })
+  const signUp = useSignUpMutation()
+  const isLoading = signUp.isPending
   const navigate = useNavigation()
 
   async function onSubmit(data: FormData) {
     try {
-      const signUpResult = await signUp({
-        variables: {
-          input: {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            mobile: data.mobile,
-            password: data.password,
-          },
+      const signUpResult = await signUp.mutateAsync({
+        input: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          mobile: data.mobile,
+          password: data.password,
         },
       })
 
-      if (signUpResult.data) {
-        const user = signUpResult.data.signUp
+      if (signUpResult.signUp) {
+        const user = signUpResult.signUp
         return navigate('VERIFY_ACCOUNT', {}, { userId: user.id }, true)
       }
     } catch (error: any) {

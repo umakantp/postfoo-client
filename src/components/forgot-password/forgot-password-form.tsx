@@ -34,20 +34,18 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ setStep, setMob
   } = useForm<FormData>({
     resolver: zodResolver(forgotPasswordSchema),
   })
-  const [forgotPassword, { loading: isLoading }] = useForgotPasswordMutation({ fetchPolicy: 'no-cache' })
+  const forgotPassword = useForgotPasswordMutation()
 
   async function onSubmit(data: FormData) {
     try {
-      const forgotPasswordResult = await forgotPassword({
-        variables: {
-          input: {
-            mobile: data.mobile,
-            ...getHoneypotFormValues(data),
-          },
+      const forgotPasswordResult = await forgotPassword.mutateAsync({
+        input: {
+          mobile: data.mobile,
+          ...getHoneypotFormValues(data),
         },
       })
 
-      if (forgotPasswordResult.data) {
+      if (!forgotPasswordResult.forgotPassword.error) {
         setStep('otpAndReset')
       }
     } catch (error: any) {
@@ -71,7 +69,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ setStep, setMob
               id="mobile"
               countries={['IN']}
               defaultCountry="IN"
-              disabled={isLoading}
+              disabled={forgotPassword.isPending}
               {...register('mobile')}
               onBlur={() => {
                 // no op this breaks the phone input
@@ -89,8 +87,8 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ setStep, setMob
             )}
           </div>
           <HoneypotInputs />
-          <button className={cn(buttonVariants())} disabled={isLoading}>
-            {isLoading && (
+          <button className={cn(buttonVariants())} disabled={forgotPassword.isPending}>
+            {forgotPassword.isPending && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
             Reset password

@@ -26,7 +26,7 @@ const Portfolios: React.FC = () => {
   const [selectedTab, setSelectedTab] = React.useState<PortfolioNavTab>(PortfolioNavTab.Dashboard)
   // Either from param or read first portfolio id as default portfolio
   const portfolioId = (portfolioIdParam as string | undefined) || user?.memberships?.[0]?.portfolio.id
-  const { data } = usePortfolioQuery({ variables: { portfolioId: portfolioId! }, skip: !portfolioId })
+  const { data } = usePortfolioQuery({ portfolioId: portfolioId || '' }, { enabled: !!portfolioId })
   const [selectedPortfolio, setSelectedPortfolio] = React.useState<PortfolioResponseFragment | undefined>()
   const matchedRoute = useMatchedRoute()
 

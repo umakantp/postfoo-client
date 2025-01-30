@@ -69,9 +69,7 @@ interface PortfolioFundsProps {
 
 const PortfolioFunds: React.FC<PortfolioFundsProps> = ({ portfolio }) => {
   const { data } = usePortfolioFundsQuery({
-    variables: {
-      input: { portfolioId: portfolio.id },
-    },
+    input: { portfolioId: portfolio.id },
   })
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [showAddFundDialog, setShowAddFundDialog] = React.useState(false)

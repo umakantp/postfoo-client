@@ -40,23 +40,22 @@ const SignInForm: React.FC = () => {
   })
   const { setUser } = useAuth()
   const searchParams = useSearchParams()
-  const [signIn, { loading: isLoading }] = useSignInMutation()
+  const signIn = useSignInMutation()
+  const isLoading = signIn.isPending
   const navigate = useNavigation()
 
   async function onSubmit(data: SignInFormData) {
     try {
-      const signInResult = await signIn({
-        variables: {
-          input: {
-            mobile: data.mobile,
-            password: data.password,
-            ...getHoneypotFormValues(data),
-          },
+      const signInResult = await signIn.mutateAsync({
+        input: {
+          mobile: data.mobile,
+          password: data.password,
+          ...getHoneypotFormValues(data),
         },
       })
 
-      if (signInResult.data) {
-        const user = signInResult.data.signIn
+      if (signInResult.signIn) {
+        const user = signInResult.signIn
         setUser(user)
         // Provider takes to time to set the user in state
         await delay(100)

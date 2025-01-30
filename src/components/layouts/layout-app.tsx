@@ -1,16 +1,17 @@
 'use client'
 
-import { ApolloProvider } from '@apollo/client'
 import * as React from 'react'
 import LayoutMain from 'src/components/layouts/layout-main'
 import AuthProvider from 'src/components/providers/auth-provider'
 import { HoneypotInputProps, HoneypotProvider } from 'src/components/providers/honeypot-provider'
 
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 import ThemeProvider from 'src/components/providers/theme-provider'
 import { Toaster } from 'src/components/ui/toaster'
 import 'src/styles/global.css'
-import { getClient } from 'src/utils/apolloClient'
-import { get, storageKeys } from 'src/utils/storage'
 
 interface LayoutAppProps {
   children: React.ReactNode,
@@ -18,17 +19,13 @@ interface LayoutAppProps {
 }
 
 const LayoutApp: React.FC<LayoutAppProps> = ({ children , honeypotInputs}) => {
-  const token = get<string | undefined>(storageKeys.AUTH_TOKEN)
-  const [localToken, setLocalToken] = React.useState<string | undefined>(token)
-  const queryClient = getClient(localToken)
+  const queryClient = new QueryClient()
 
   return (
-    <ApolloProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <HoneypotProvider {...honeypotInputs}>
-          <AuthProvider onLogin={(user) => {
-            setLocalToken(user?.token)
-          }}>
+          <AuthProvider>
             <>
               <LayoutMain>
                 {children}
@@ -38,7 +35,7 @@ const LayoutApp: React.FC<LayoutAppProps> = ({ children , honeypotInputs}) => {
           </AuthProvider>
         </HoneypotProvider>
       </ThemeProvider>
-    </ApolloProvider>
+    </QueryClientProvider>
   )
 }
 

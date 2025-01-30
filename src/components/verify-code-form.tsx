@@ -31,8 +31,10 @@ const VerifyCodeForm: React.FC = () => {
   })
   const searchParams = useSearchParams()
   const userId = searchParams.get('userId')
-  const [verifyCode, { loading: isLoading }] = useVerifyCodeMutation({ fetchPolicy: 'no-cache' })
-  const [resendCode, { loading: isResending }] = useResendCodeMutation({ fetchPolicy: 'no-cache' })
+  const verifyCode = useVerifyCodeMutation()
+  const isLoading = verifyCode.isPending
+  const resendCode = useResendCodeMutation()
+  const isResending = resendCode.isPending
   const navigate = useNavigation()
 
   const handleResendCode = async () => {
@@ -43,14 +45,12 @@ const VerifyCodeForm: React.FC = () => {
       })
       return
     }
-    const resendCodeResult = await resendCode({
-      variables: {
-        input: {
-          userId,
-        },
+    const resendCodeResult = await resendCode.mutateAsync({
+      input: {
+        userId,
       },
     })
-    if (resendCodeResult.data) {
+    if (resendCodeResult.resendCode) {
       setTimer(60)
       toast({
         description: 'OTP Code has been resent, please check your mobile.',
@@ -68,17 +68,15 @@ const VerifyCodeForm: React.FC = () => {
         })
         return
       }
-      const verifyCodeResult = await verifyCode({
-        variables: {
-          input: {
-            userId,
-            code: data.code,
-            ...getHoneypotFormValues(data),
-          },
+      const verifyCodeResult = await verifyCode.mutateAsync({
+        input: {
+          userId,
+          code: data.code,
+          ...getHoneypotFormValues(data),
         },
       })
 
-      if (verifyCodeResult.data) {
+      if (verifyCodeResult.verifyCode) {
         toast({
           description: 'Account verified successfully. Taking you for Sign In page.',
           variant: 'success',
