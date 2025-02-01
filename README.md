@@ -2,7 +2,7 @@
 
 PostFoo helps you keep track of your finances and information for you and your family
 
-This is deployed @ [postfoo.com](https://postfoo.com) and server at [gql.postfoo.com](https://gql.postfoo.com)
+This is deployed @ [postfoo.com](https://postfoo.com) and [server](https://github.com/umakantp/postfoo-server) at [gql.postfoo.com](https://gql.postfoo.com)
 
 ### Setup
 
@@ -28,7 +28,9 @@ postfoo-client
 ├── build (Build output)
 ├── node_modules (Dependencies)
 ├── .env (Environment variables)
+├── .env.example (Sample environment variables to get started)
 ├── .gitignore (Files to ignore)
+├── .nvmrc (Node version for nvm/project)
 ├── codegen.yml (GraphQL codegen config)
 ├── next.config.mjs (Next.js config)
 ├── eslint.config.mjs (ESLint config)
@@ -45,6 +47,8 @@ postfoo-client
     ├── app (Components for page/url)
     ├── components (Reusable components)
     │   ├── commons (Common components)
+    │   ├── layouts (Layout components)
+    │   ├── providers (Providers components)
     │   └── ui (shadcn/ui components)
     ├── generated (Generated graphql file)
     ├── graphql
@@ -54,11 +58,15 @@ postfoo-client
     ├── styles (Reusable styles)
     └── utils
         ├── constants.ts (Constants routes, etc.)
-        ├── utils.ts (Reusable helper functions)
+        ├── form.ts (Form validation helper schemas)
         ├── history.ts (History helper functions)
         ├── logger.ts (Logging helper functions)
+        ├── react-query-fetcher.ts (Common fetcher for tanstack/react-query)
         ├── storage.ts (Local storage helper functions)
-        └── toast.ts (Toast helper functions)
+        ├── supported-browsers.ts (Contains regex for supported browsers `npm run supportedBrowsers`)
+        ├── toast.ts (Toast helper functions)
+        ├── types.ts (Commonly used custom types)
+        └── utils.ts (Reusable helper functions)
 ```
 
 ### SMS (account verification)
@@ -109,7 +117,5 @@ Generally reading the code should get you the gist of what are the general guide
 
 ### TODO
 
-- [ ] Add a proper documentation
 - [ ] Add a prettier
-- [ ] Add a proper e2e testing
-- [ ] Fix the eslint config to add more general rules
+- [ ] Add a e2e testing
