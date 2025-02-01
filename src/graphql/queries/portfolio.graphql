@@ -15,3 +15,14 @@ query portfolioFunds($input: PortfolioFundsInput!) {
     }
   }
 }
+
+query portfolioStocks($input: PortfolioStocksInput!) {
+  portfolioStocks(input: $input) {
+    nodes {
+      ...PortfolioStockResponse
+    }
+    pageInfo {
+      ...PageInfoResponse
+    }
+  }
+}

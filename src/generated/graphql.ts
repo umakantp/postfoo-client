@@ -61,6 +61,20 @@ export type CreatePortfolioInput = {
   name: Scalars['String']['input'];
 };
 
+export type CreatePortfolioStockInput = {
+  cost: Scalars['Float']['input'];
+  portfolioId: Scalars['ID']['input'];
+  stockId: Scalars['ID']['input'];
+  units: Scalars['Float']['input'];
+};
+
+export type CreateStockInput = {
+  exchange: Exchange;
+  lastNav: Scalars['Float']['input'];
+  name: Scalars['String']['input'];
+  symbol: Scalars['String']['input'];
+};
+
 export type DeleteFundInput = {
   fundId: Scalars['ID']['input'];
 };
@@ -71,6 +85,14 @@ export type DeletePortfolioFundInput = {
 
 export type DeletePortfolioInput = {
   portfolioId: Scalars['ID']['input'];
+};
+
+export type DeletePortfolioStockInput = {
+  portfolioStockId: Scalars['ID']['input'];
+};
+
+export type DeleteStockInput = {
+  stockId: Scalars['ID']['input'];
 };
 
 /**  Error codes  */
@@ -87,6 +109,14 @@ export enum ErrorCode {
   NOT_FOUND = 'NOT_FOUND',
   TOO_MANY_REQUESTS = 'TOO_MANY_REQUESTS',
   UNAUTHENTICATED = 'UNAUTHENTICATED'
+}
+
+export enum Exchange {
+  BSE = 'BSE',
+  LSE = 'LSE',
+  NASDAQ = 'NASDAQ',
+  NSE = 'NSE',
+  NYSE = 'NYSE'
 }
 
 export type ForgotPasswordInput = {
@@ -224,9 +254,13 @@ export type Mutation = {
   createFund: Fund;
   createPortfolio: Portfolio;
   createPortfolioFund: PortfolioFund;
+  createPortfolioStock: PortfolioStock;
+  createStock: Stock;
   deleteFund: SuccessPayload;
   deletePortfolio: SuccessPayload;
   deletePortfolioFund: SuccessPayload;
+  deletePortfolioStock: SuccessPayload;
+  deleteStock: SuccessPayload;
   forgotPassword: SuccessPayload;
   resendCode: SuccessPayload;
   resetPassword: SuccessPayload;
@@ -235,6 +269,8 @@ export type Mutation = {
   updateFund: Fund;
   updatePortfolio: Portfolio;
   updatePortfolioFund: PortfolioFund;
+  updatePortfolioStock: PortfolioStock;
+  updateStock: Stock;
   verifyCode: SuccessPayload;
 };
 
@@ -254,6 +290,16 @@ export type MutationCreatePortfolioFundArgs = {
 };
 
 
+export type MutationCreatePortfolioStockArgs = {
+  input: CreatePortfolioStockInput;
+};
+
+
+export type MutationCreateStockArgs = {
+  input: CreateStockInput;
+};
+
+
 export type MutationDeleteFundArgs = {
   input: DeleteFundInput;
 };
@@ -266,6 +312,16 @@ export type MutationDeletePortfolioArgs = {
 
 export type MutationDeletePortfolioFundArgs = {
   input: DeletePortfolioFundInput;
+};
+
+
+export type MutationDeletePortfolioStockArgs = {
+  input: DeletePortfolioStockInput;
+};
+
+
+export type MutationDeleteStockArgs = {
+  input: DeleteStockInput;
 };
 
 
@@ -306,6 +362,16 @@ export type MutationUpdatePortfolioArgs = {
 
 export type MutationUpdatePortfolioFundArgs = {
   input: UpdatePortfolioFundInput;
+};
+
+
+export type MutationUpdatePortfolioStockArgs = {
+  input: UpdatePortfolioStockInput;
+};
+
+
+export type MutationUpdateStockArgs = {
+  input: UpdateStockInput;
 };
 
 
@@ -350,6 +416,7 @@ export type Portfolio = Node & {
   id: Scalars['ID']['output'];
   members: Array<Membership>;
   name: Scalars['String']['output'];
+  stocks: Array<PortfolioStock>;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -374,6 +441,27 @@ export type PortfolioFundsPayload = PagePayload & {
   total: Scalars['Int']['output'];
 };
 
+export type PortfolioStock = Node & {
+  cost: Scalars['Float']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  portfolio: Portfolio;
+  stock: Stock;
+  units: Scalars['Float']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type PortfolioStocksInput = {
+  page?: InputMaybe<PageInput>;
+  portfolioId: Scalars['ID']['input'];
+};
+
+export type PortfolioStocksPayload = PagePayload & {
+  nodes: Array<PortfolioStock>;
+  pageInfo: PageInfo;
+  total: Scalars['Int']['output'];
+};
+
 export type Query = {
   fund: Fund;
   funds: FundsPayload;
@@ -381,6 +469,10 @@ export type Query = {
   portfolio: Portfolio;
   portfolioFund: PortfolioFund;
   portfolioFunds: PortfolioFundsPayload;
+  portfolioStock: PortfolioStock;
+  portfolioStocks: PortfolioStocksPayload;
+  stock: Stock;
+  stocks: StocksPayload;
 };
 
 
@@ -406,6 +498,26 @@ export type QueryPortfolioFundArgs = {
 
 export type QueryPortfolioFundsArgs = {
   input: PortfolioFundsInput;
+};
+
+
+export type QueryPortfolioStockArgs = {
+  portfolioStockId: Scalars['ID']['input'];
+};
+
+
+export type QueryPortfolioStocksArgs = {
+  input: PortfolioStocksInput;
+};
+
+
+export type QueryStockArgs = {
+  stockId: Scalars['ID']['input'];
+};
+
+
+export type QueryStocksArgs = {
+  input?: InputMaybe<StocksInput>;
 };
 
 export type ResendCodeInput = {
@@ -437,6 +549,30 @@ export type SignUpInput = {
   password: Scalars['ID']['input'];
 };
 
+export type Stock = Node & {
+  createdAt: Scalars['DateTime']['output'];
+  /**  Exchange + Symbol should be unique  */
+  exchange: Exchange;
+  id: Scalars['ID']['output'];
+  lastPrice: Scalars['Float']['output'];
+  name: Scalars['String']['output'];
+  symbol: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type StocksInput = {
+  exchange?: InputMaybe<Exchange>;
+  page?: InputMaybe<PageInput>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  symbol?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type StocksPayload = PagePayload & {
+  nodes: Array<Stock>;
+  pageInfo: PageInfo;
+  total: Scalars['Int']['output'];
+};
+
 export type SuccessPayload = {
   error?: Maybe<ErrorCode>;
 };
@@ -463,6 +599,20 @@ export type UpdatePortfolioInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   portfolioId: Scalars['ID']['input'];
+};
+
+export type UpdatePortfolioStockInput = {
+  cost?: InputMaybe<Scalars['Float']['input']>;
+  portfolioStockId: Scalars['ID']['input'];
+  units?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type UpdateStockInput = {
+  exchange?: InputMaybe<Exchange>;
+  lastNav: Scalars['Float']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  stockId: Scalars['ID']['input'];
+  symbol?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = Node & {
@@ -510,6 +660,10 @@ export type PageInfoResponseFragment = { hasNextPage: boolean, hasPreviousPage: 
 export type PortfolioResponseFragment = { id: string, name: string, description?: string | undefined };
 
 export type PortfolioFundResponseFragment = { id: string, units: number, cost: number, fund: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number } };
+
+export type PortfolioStockResponseFragment = { id: string, units: number, cost: number, stock: { id: string, name: string, symbol: string, exchange: Exchange, lastPrice: number } };
+
+export type StockResponseFragment = { id: string, name: string, symbol: string, exchange: Exchange, lastPrice: number };
 
 export type MyUserResponseFragment = { id: string, firstName: string, lastName?: string | undefined, name: string, mobile: string, token: string, status: UserStatus, isVerified: boolean, isBlocked: boolean, memberships: Array<{ id: string, role: UserRole, portfolio: { id: string, name: string } }> };
 
@@ -571,6 +725,13 @@ export type CreatePortfolioFundMutationVariables = Exact<{
 
 export type CreatePortfolioFundMutation = { createPortfolioFund: { id: string, units: number, cost: number, fund: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number } } };
 
+export type CreatePortfolioStockMutationVariables = Exact<{
+  input: CreatePortfolioStockInput;
+}>;
+
+
+export type CreatePortfolioStockMutation = { createPortfolioStock: { id: string, units: number, cost: number, stock: { id: string, name: string, symbol: string, exchange: Exchange, lastPrice: number } } };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -596,6 +757,20 @@ export type PortfolioFundsQueryVariables = Exact<{
 
 
 export type PortfolioFundsQuery = { portfolioFunds: { nodes: Array<{ id: string, units: number, cost: number, fund: { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number } }>, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined } } };
+
+export type PortfolioStocksQueryVariables = Exact<{
+  input: PortfolioStocksInput;
+}>;
+
+
+export type PortfolioStocksQuery = { portfolioStocks: { nodes: Array<{ id: string, units: number, cost: number, stock: { id: string, name: string, symbol: string, exchange: Exchange, lastPrice: number } }>, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined } } };
+
+export type StocksQueryVariables = Exact<{
+  input?: InputMaybe<StocksInput>;
+}>;
+
+
+export type StocksQuery = { stocks: { nodes: Array<{ id: string, name: string, symbol: string, exchange: Exchange, lastPrice: number }>, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined } } };
 
 
 export const PageInfoResponseFragmentDoc = `
@@ -634,6 +809,25 @@ export const PortfolioFundResponseFragmentDoc = `
   cost
 }
     ${FundResponseFragmentDoc}`;
+export const StockResponseFragmentDoc = `
+    fragment StockResponse on Stock {
+  id
+  name
+  symbol
+  exchange
+  lastPrice
+}
+    `;
+export const PortfolioStockResponseFragmentDoc = `
+    fragment PortfolioStockResponse on PortfolioStock {
+  id
+  stock {
+    ...StockResponse
+  }
+  units
+  cost
+}
+    ${StockResponseFragmentDoc}`;
 export const MyUserResponseFragmentDoc = `
     fragment MyUserResponse on User {
   id
@@ -787,7 +981,7 @@ export const useResetPasswordMutation = <
     )};
 
 export const CreatePortfolioDocument = `
-    mutation CreatePortfolio($input: CreatePortfolioInput!) {
+    mutation createPortfolio($input: CreatePortfolioInput!) {
   createPortfolio(input: $input) {
     id
   }
@@ -801,14 +995,14 @@ export const useCreatePortfolioMutation = <
     
     return useMutation<CreatePortfolioMutation, TError, CreatePortfolioMutationVariables, TContext>(
       {
-    mutationKey: ['CreatePortfolio'],
+    mutationKey: ['createPortfolio'],
     mutationFn: (variables?: CreatePortfolioMutationVariables) => reactQueryFetcher<CreatePortfolioMutation, CreatePortfolioMutationVariables>(CreatePortfolioDocument, variables)(),
     ...options
   }
     )};
 
 export const CreatePortfolioFundDocument = `
-    mutation CreatePortfolioFund($input: CreatePortfolioFundInput!) {
+    mutation createPortfolioFund($input: CreatePortfolioFundInput!) {
   createPortfolioFund(input: $input) {
     ...PortfolioFundResponse
   }
@@ -822,8 +1016,29 @@ export const useCreatePortfolioFundMutation = <
     
     return useMutation<CreatePortfolioFundMutation, TError, CreatePortfolioFundMutationVariables, TContext>(
       {
-    mutationKey: ['CreatePortfolioFund'],
+    mutationKey: ['createPortfolioFund'],
     mutationFn: (variables?: CreatePortfolioFundMutationVariables) => reactQueryFetcher<CreatePortfolioFundMutation, CreatePortfolioFundMutationVariables>(CreatePortfolioFundDocument, variables)(),
+    ...options
+  }
+    )};
+
+export const CreatePortfolioStockDocument = `
+    mutation createPortfolioStock($input: CreatePortfolioStockInput!) {
+  createPortfolioStock(input: $input) {
+    ...PortfolioStockResponse
+  }
+}
+    ${PortfolioStockResponseFragmentDoc}`;
+
+export const useCreatePortfolioStockMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<CreatePortfolioStockMutation, TError, CreatePortfolioStockMutationVariables, TContext>) => {
+    
+    return useMutation<CreatePortfolioStockMutation, TError, CreatePortfolioStockMutationVariables, TContext>(
+      {
+    mutationKey: ['createPortfolioStock'],
+    mutationFn: (variables?: CreatePortfolioStockMutationVariables) => reactQueryFetcher<CreatePortfolioStockMutation, CreatePortfolioStockMutationVariables>(CreatePortfolioStockDocument, variables)(),
     ...options
   }
     )};
@@ -932,6 +1147,66 @@ export const usePortfolioFundsQuery = <
       {
     queryKey: ['portfolioFunds', variables],
     queryFn: reactQueryFetcher<PortfolioFundsQuery, PortfolioFundsQueryVariables>(PortfolioFundsDocument, variables),
+    ...options
+  }
+    )};
+
+export const PortfolioStocksDocument = `
+    query portfolioStocks($input: PortfolioStocksInput!) {
+  portfolioStocks(input: $input) {
+    nodes {
+      ...PortfolioStockResponse
+    }
+    pageInfo {
+      ...PageInfoResponse
+    }
+  }
+}
+    ${PortfolioStockResponseFragmentDoc}
+${PageInfoResponseFragmentDoc}`;
+
+export const usePortfolioStocksQuery = <
+      TData = PortfolioStocksQuery,
+      TError = unknown
+    >(
+      variables: PortfolioStocksQueryVariables,
+      options?: Omit<UseQueryOptions<PortfolioStocksQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<PortfolioStocksQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<PortfolioStocksQuery, TError, TData>(
+      {
+    queryKey: ['portfolioStocks', variables],
+    queryFn: reactQueryFetcher<PortfolioStocksQuery, PortfolioStocksQueryVariables>(PortfolioStocksDocument, variables),
+    ...options
+  }
+    )};
+
+export const StocksDocument = `
+    query stocks($input: StocksInput) {
+  stocks(input: $input) {
+    nodes {
+      ...StockResponse
+    }
+    pageInfo {
+      ...PageInfoResponse
+    }
+  }
+}
+    ${StockResponseFragmentDoc}
+${PageInfoResponseFragmentDoc}`;
+
+export const useStocksQuery = <
+      TData = StocksQuery,
+      TError = unknown
+    >(
+      variables?: StocksQueryVariables,
+      options?: Omit<UseQueryOptions<StocksQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<StocksQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<StocksQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['stocks'] : ['stocks', variables],
+    queryFn: reactQueryFetcher<StocksQuery, StocksQueryVariables>(StocksDocument, variables),
     ...options
   }
     )};

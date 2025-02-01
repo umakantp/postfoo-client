@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import * as React from 'react'
 import { MyUserResponseFragment } from 'src/generated/graphql'
-import { useLockBody } from 'src/utils/useLockBody'
+import { useLockBody } from 'src/utils/use-lock-body'
 import { cn } from 'src/utils/utils'
 
 interface MobileNavProps {

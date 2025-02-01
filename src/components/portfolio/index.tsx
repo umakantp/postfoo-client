@@ -11,6 +11,7 @@ import PortfolioSelector from 'src/components/portfolio/components/portfolio-sel
 import PortfolioDashboard from 'src/components/portfolio/portfolio-dashboard'
 import PortfolioFunds from 'src/components/portfolio/portfolio-funds'
 import PortfolioNav, { PortfolioNavTab, PortfolioNavTabLinks } from 'src/components/portfolio/portfolio-nav'
+import PortfolioStocks from 'src/components/portfolio/portfolio-stocks'
 import { useAuth } from 'src/components/providers/auth-provider'
 import { buttonVariants } from 'src/components/ui/button'
 import { PortfolioResponseFragment, usePortfolioQuery } from 'src/generated/graphql'
@@ -86,6 +87,7 @@ const Portfolios: React.FC = () => {
         <div className="my-3">
           {selectedTab === PortfolioNavTab.Dashboard && <PortfolioDashboard/>}
           {selectedTab === PortfolioNavTab.MutualFunds && <PortfolioFunds portfolio={selectedPortfolio} />}
+          {selectedTab === PortfolioNavTab.Stocks && <PortfolioStocks portfolio={selectedPortfolio} />}
         </div>
       </div>
     </div>

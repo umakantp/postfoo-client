@@ -73,7 +73,13 @@ export const portfolioFormSchema = z.object({
 })
 
 export const portfolioAddFundFormSchema = z.object({
-  fundId: z.string().length(12, 'Selec the fund'),
+  fundId: z.string().length(12, 'Select the fund'),
+  cost: z.coerce.number().positive('Cost must be positive'),
+  units: z.coerce.number().positive('Units must be positive'),
+})
+
+export const portfolioAddStockFormSchema = z.object({
+  stockId: z.string().length(12, 'Select the stock'),
   cost: z.coerce.number().positive('Cost must be positive'),
   units: z.coerce.number().positive('Units must be positive'),
 })

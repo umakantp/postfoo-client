@@ -1,0 +1,7 @@
+fragment StockResponse on Stock {
+  id
+  name
+  symbol
+  exchange
+  lastPrice
+}

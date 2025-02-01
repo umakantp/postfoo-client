@@ -1,0 +1,10 @@
+query stocks($input: StocksInput) {
+  stocks(input: $input) {
+    nodes {
+      ...StockResponse
+    }
+    pageInfo {
+      ...PageInfoResponse
+    }
+  }
+}

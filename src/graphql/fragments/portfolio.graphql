@@ -12,3 +12,12 @@ fragment PortfolioFundResponse on PortfolioFund {
   units
   cost
 }
+
+fragment PortfolioStockResponse on PortfolioStock {
+  id
+  stock {
+    ...StockResponse
+  }
+  units
+  cost
+}

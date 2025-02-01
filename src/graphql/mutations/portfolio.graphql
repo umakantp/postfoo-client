@@ -1,11 +1,17 @@
-mutation CreatePortfolio($input: CreatePortfolioInput!) {
+mutation createPortfolio($input: CreatePortfolioInput!) {
   createPortfolio(input: $input) {
     id
   }
 }
 
-mutation CreatePortfolioFund($input: CreatePortfolioFundInput!) {
+mutation createPortfolioFund($input: CreatePortfolioFundInput!) {
   createPortfolioFund(input: $input) {
     ...PortfolioFundResponse
+  }
+}
+
+mutation createPortfolioStock($input: CreatePortfolioStockInput!) {
+  createPortfolioStock(input: $input) {
+    ...PortfolioStockResponse
   }
 }
