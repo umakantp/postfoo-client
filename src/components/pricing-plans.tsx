@@ -3,30 +3,17 @@
 import * as React from 'react'
 import PricingCard from 'src/components/pricing-card'
 import { Tabs, TabsList, TabsTrigger } from 'src/components/ui/tabs'
+import { SubscriptionPlan, usePlansQuery } from 'src/generated/graphql'
 import { routes } from 'src/utils/constants'
 
-const plans = [
-  {
-    title: 'Basic',
-    monthlyPrice: 0,
-    yearlyPrice: 0,
-    description: 'Good to get you started for trying out the features',
-    features: ['Create one portfolio', 'Add max 5 currentfunds', 'Add max 30 current stocks'],
-    actionLabel: 'Sign Up',
-    actionLink: routes.SIGN_UP,
-  },
-  {
-    title: 'Pro',
-    monthlyPrice: 100,
-    yearlyPrice: 1000,
-    description: 'Perfect when you are serious about tracking your investments',
-    features: ['Create unlimited portfolios', 'Add unlimited funds', 'Add unlimited stocks'],
-    actionLabel: 'Coming Soon',
-    popular: true,
-  },
-]
+const links = {
+  [SubscriptionPlan.BASIC]: { link: routes.SIGN_UP, text: 'Sign Up' },
+  [SubscriptionPlan.PRO]: { link: undefined, text: 'Coming Soon' },
+  [SubscriptionPlan.ADVANCED]: { link: undefined, text: 'Coming Soon' },
+}
 
 const PricingPlans: React.FC = () => {
+  const { data } = usePlansQuery()
   const [isYearly, setIsYearly] = React.useState(false)
   const onSwitch = (value: string) => setIsYearly(parseInt(value) === 1)
 
@@ -43,8 +30,8 @@ const PricingPlans: React.FC = () => {
         </TabsList>
       </Tabs>
       <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-8">
-        {plans.map(plan => (
-          <PricingCard key={plan.title} {...plan} isYearly={isYearly} />
+        {data?.plans.plans.map(plan => (
+          <PricingCard key={plan.title} {...plan} isYearly={isYearly} actionLabel={links[plan.id].text} actionLink={links[plan.id].link} />
         ))}
       </section>
     </>

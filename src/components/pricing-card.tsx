@@ -28,7 +28,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ title, description, features,
               <CardTitle className="text-zinc-700 dark:text-zinc-400 text-lg">{title}</CardTitle>
               <div
                 className={cn('px-2.5 rounded-xl h-fit text-sm py-1 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white', {
-                  'bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black ': popular,
+                  'bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black ': true,
                 })}>
                 Save ₹{monthlyPrice * 12 - yearlyPrice}
               </div>

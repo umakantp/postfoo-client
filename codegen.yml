@@ -22,6 +22,8 @@ config:
     JWT: string
     URL: string
     NonEmptyString: string
+    Json: any
+    JsonObject: any
 generates:
   src/generated/graphql.ts:
     plugins:

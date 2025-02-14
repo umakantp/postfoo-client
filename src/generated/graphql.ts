@@ -21,6 +21,8 @@ export type Scalars = {
   DateTime: { input: string; output: string; }
   EmailAddress: { input: string; output: string; }
   JWT: { input: string; output: string; }
+  Json: { input: any; output: any; }
+  JsonObject: { input: any; output: any; }
   PhoneNumber: { input: string; output: string; }
   URL: { input: string; output: string; }
   Void: { input: void; output: void; }
@@ -36,6 +38,12 @@ export type Code = Node & {
   updatedAt: Scalars['DateTime']['output'];
   /**  The user that this code is for  */
   user: User;
+};
+
+export type CreateFieldInput = {
+  name: Scalars['ID']['input'];
+  portfolioId: Scalars['ID']['input'];
+  value: Scalars['JsonObject']['input'];
 };
 
 export type CreateFundInput = {
@@ -75,6 +83,10 @@ export type CreateStockInput = {
   symbol: Scalars['String']['input'];
 };
 
+export type DeleteFieldInput = {
+  fieldId: Scalars['ID']['input'];
+};
+
 export type DeleteFundInput = {
   fundId: Scalars['ID']['input'];
 };
@@ -112,12 +124,26 @@ export enum ErrorCode {
 }
 
 export enum Exchange {
-  BSE = 'BSE',
+  BOM = 'BOM',
   LSE = 'LSE',
   NASDAQ = 'NASDAQ',
   NSE = 'NSE',
   NYSE = 'NYSE'
 }
+
+export type Field = Node & {
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['ID']['output'];
+  portfolio: Portfolio;
+  updatedAt: Scalars['DateTime']['output'];
+  value: Scalars['JsonObject']['output'];
+};
+
+export type FieldsInput = {
+  name?: InputMaybe<Scalars['ID']['input']>;
+  portfolioId: Scalars['ID']['input'];
+};
 
 export type ForgotPasswordInput = {
   from__confirm?: InputMaybe<Scalars['String']['input']>;
@@ -162,7 +188,6 @@ export enum FundCategory {
   DEBT_OVERNIGHT = 'DEBT_OVERNIGHT',
   DEBT_SHORT_DURATION = 'DEBT_SHORT_DURATION',
   DEBT_ULTRA_SHORT_DURATION = 'DEBT_ULTRA_SHORT_DURATION',
-  EQUITY_BANKING_AND_FINANCIAL_SERVICES = 'EQUITY_BANKING_AND_FINANCIAL_SERVICES',
   EQUITY_DIVIDEND_YIELD = 'EQUITY_DIVIDEND_YIELD',
   EQUITY_ELSS = 'EQUITY_ELSS',
   EQUITY_FLEXI_CAP = 'EQUITY_FLEXI_CAP',
@@ -171,6 +196,7 @@ export enum FundCategory {
   EQUITY_LARGE_CAP = 'EQUITY_LARGE_CAP',
   EQUITY_MID_CAP = 'EQUITY_MID_CAP',
   EQUITY_MULTI_CAP = 'EQUITY_MULTI_CAP',
+  EQUITY_SECTORAL_BANKING_AND_FINANCIAL_SERVICES = 'EQUITY_SECTORAL_BANKING_AND_FINANCIAL_SERVICES',
   EQUITY_SECTORAL_INFRASTRUCTURE = 'EQUITY_SECTORAL_INFRASTRUCTURE',
   EQUITY_SECTORAL_PHARMA_AND_HEALTHCARE = 'EQUITY_SECTORAL_PHARMA_AND_HEALTHCARE',
   EQUITY_SECTORAL_TECHNOLOGY = 'EQUITY_SECTORAL_TECHNOLOGY',
@@ -251,11 +277,13 @@ export type Membership = Node & {
 };
 
 export type Mutation = {
+  createField: Field;
   createFund: Fund;
   createPortfolio: Portfolio;
   createPortfolioFund: PortfolioFund;
   createPortfolioStock: PortfolioStock;
   createStock: Stock;
+  deleteField: SuccessPayload;
   deleteFund: SuccessPayload;
   deletePortfolio: SuccessPayload;
   deletePortfolioFund: SuccessPayload;
@@ -266,12 +294,18 @@ export type Mutation = {
   resetPassword: SuccessPayload;
   signIn: User;
   signUp: User;
+  updateField: Field;
   updateFund: Fund;
   updatePortfolio: Portfolio;
   updatePortfolioFund: PortfolioFund;
   updatePortfolioStock: PortfolioStock;
   updateStock: Stock;
   verifyCode: SuccessPayload;
+};
+
+
+export type MutationCreateFieldArgs = {
+  input: CreateFieldInput;
 };
 
 
@@ -297,6 +331,11 @@ export type MutationCreatePortfolioStockArgs = {
 
 export type MutationCreateStockArgs = {
   input: CreateStockInput;
+};
+
+
+export type MutationDeleteFieldArgs = {
+  input: DeleteFieldInput;
 };
 
 
@@ -347,6 +386,11 @@ export type MutationSignInArgs = {
 
 export type MutationSignUpArgs = {
   input: SignUpInput;
+};
+
+
+export type MutationUpdateFieldArgs = {
+  input: UpdateFieldInput;
 };
 
 
@@ -409,6 +453,31 @@ export type PagePayload = {
   total: Scalars['Int']['output'];
 };
 
+export type Plan = {
+  description: Scalars['ID']['output'];
+  features: Array<Scalars['ID']['output']>;
+  id: SubscriptionPlan;
+  monthlyPrice: Scalars['Int']['output'];
+  popular: Scalars['Boolean']['output'];
+  title: Scalars['ID']['output'];
+  yearlyPrice: Scalars['Int']['output'];
+};
+
+export type PlanPermission = {
+  familyMembers: Scalars['Int']['output'];
+  funds: Scalars['Int']['output'];
+  id: SubscriptionPlan;
+  portfolios: Scalars['Int']['output'];
+  schemes: Scalars['Int']['output'];
+  stocks: Scalars['Int']['output'];
+  uploadFiles: Scalars['Boolean']['output'];
+};
+
+export type PlansPayload = {
+  planPermissions: Array<PlanPermission>;
+  plans: Array<Plan>;
+};
+
 export type Portfolio = Node & {
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
@@ -463,9 +532,12 @@ export type PortfolioStocksPayload = PagePayload & {
 };
 
 export type Query = {
+  field: Field;
+  fields: Array<Field>;
   fund: Fund;
   funds: FundsPayload;
   me?: Maybe<User>;
+  plans: PlansPayload;
   portfolio: Portfolio;
   portfolioFund: PortfolioFund;
   portfolioFunds: PortfolioFundsPayload;
@@ -473,6 +545,16 @@ export type Query = {
   portfolioStocks: PortfolioStocksPayload;
   stock: Stock;
   stocks: StocksPayload;
+};
+
+
+export type QueryFieldArgs = {
+  fieldId: Scalars['ID']['input'];
+};
+
+
+export type QueryFieldsArgs = {
+  input: FieldsInput;
 };
 
 
@@ -573,8 +655,20 @@ export type StocksPayload = PagePayload & {
   total: Scalars['Int']['output'];
 };
 
+export enum SubscriptionPlan {
+  ADVANCED = 'ADVANCED',
+  BASIC = 'BASIC',
+  PRO = 'PRO'
+}
+
 export type SuccessPayload = {
   error?: Maybe<ErrorCode>;
+};
+
+export type UpdateFieldInput = {
+  fieldId: Scalars['ID']['input'];
+  name: Scalars['ID']['input'];
+  value: Scalars['JsonObject']['input'];
 };
 
 export type UpdateFundInput = {
@@ -654,6 +748,10 @@ export type VerifyCodeInput = {
 };
 
 export type FundResponseFragment = { id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number };
+
+export type PlanResponseFragment = { id: SubscriptionPlan, title: string, monthlyPrice: number, yearlyPrice: number, description: string, features: Array<string>, popular: boolean };
+
+export type PlanPermissionResponseFragment = { id: SubscriptionPlan, portfolios: number, funds: number, stocks: number, schemes: number, familyMembers: number, uploadFiles: boolean };
 
 export type PageInfoResponseFragment = { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined };
 
@@ -744,6 +842,11 @@ export type FundsQueryVariables = Exact<{
 
 export type FundsQuery = { funds: { nodes: Array<{ id: string, name: string, description?: string | undefined, plan?: FundPlan | undefined, type?: FundType | undefined, category?: FundCategory | undefined, lastNav: number }>, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined } } };
 
+export type PlansQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PlansQuery = { plans: { plans: Array<{ id: SubscriptionPlan, title: string, monthlyPrice: number, yearlyPrice: number, description: string, features: Array<string>, popular: boolean }>, planPermissions: Array<{ id: SubscriptionPlan, portfolios: number, funds: number, stocks: number, schemes: number, familyMembers: number, uploadFiles: boolean }> } };
+
 export type PortfolioQueryVariables = Exact<{
   portfolioId: Scalars['ID']['input'];
 }>;
@@ -773,6 +876,28 @@ export type StocksQueryVariables = Exact<{
 export type StocksQuery = { stocks: { nodes: Array<{ id: string, name: string, symbol: string, exchange: Exchange, lastPrice: number }>, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | undefined, endCursor?: string | undefined } } };
 
 
+export const PlanResponseFragmentDoc = `
+    fragment PlanResponse on Plan {
+  id
+  title
+  monthlyPrice
+  yearlyPrice
+  description
+  features
+  popular
+}
+    `;
+export const PlanPermissionResponseFragmentDoc = `
+    fragment PlanPermissionResponse on PlanPermission {
+  id
+  portfolios
+  funds
+  stocks
+  schemes
+  familyMembers
+  uploadFiles
+}
+    `;
 export const PageInfoResponseFragmentDoc = `
     fragment PageInfoResponse on PageInfo {
   hasNextPage
@@ -1093,6 +1218,36 @@ export const useFundsQuery = <
       {
     queryKey: variables === undefined ? ['funds'] : ['funds', variables],
     queryFn: reactQueryFetcher<FundsQuery, FundsQueryVariables>(FundsDocument, variables),
+    ...options
+  }
+    )};
+
+export const PlansDocument = `
+    query plans {
+  plans {
+    plans {
+      ...PlanResponse
+    }
+    planPermissions {
+      ...PlanPermissionResponse
+    }
+  }
+}
+    ${PlanResponseFragmentDoc}
+${PlanPermissionResponseFragmentDoc}`;
+
+export const usePlansQuery = <
+      TData = PlansQuery,
+      TError = unknown
+    >(
+      variables?: PlansQueryVariables,
+      options?: Omit<UseQueryOptions<PlansQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<PlansQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<PlansQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['plans'] : ['plans', variables],
+    queryFn: reactQueryFetcher<PlansQuery, PlansQueryVariables>(PlansDocument, variables),
     ...options
   }
     )};

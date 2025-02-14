@@ -1,0 +1,19 @@
+fragment PlanResponse on Plan {
+  id
+  title
+  monthlyPrice
+  yearlyPrice
+  description
+  features,
+  popular
+}
+
+fragment PlanPermissionResponse on PlanPermission {
+  id
+  portfolios
+  funds
+  stocks
+  schemes
+  familyMembers
+  uploadFiles
+}

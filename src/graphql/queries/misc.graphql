@@ -1,0 +1,10 @@
+query plans {
+  plans {
+    plans {
+      ...PlanResponse
+    }
+    planPermissions {
+      ...PlanPermissionResponse
+    }
+  }
+}
