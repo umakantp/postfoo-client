@@ -40,8 +40,11 @@ const columns: ColumnDef<PortfolioStockCols>[] = [
     },
   },
   {
-    accessorKey: 'lastNav',
+    accessorKey: 'lastPrice',
     header: 'Last Price',
+    cell: ({ row }) => {
+      return <span className="text-right">₹ {row.getValue('lastPrice')}</span>
+    }
   },
   {
     accessorKey: 'cost',

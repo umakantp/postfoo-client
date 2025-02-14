@@ -41,7 +41,7 @@ const columns: ColumnDef<PortfolioFundCols>[] = [
   },
   {
     accessorKey: 'lastNav',
-    header: 'Last Price',
+    header: 'Last NAV',
   },
   {
     accessorKey: 'cost',
