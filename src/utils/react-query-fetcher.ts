@@ -1,4 +1,11 @@
-import { get, storageKeys } from 'src/utils/storage'
+import { QueryClient } from '@tanstack/react-query'
+import { ErrorCode } from 'src/generated/graphql'
+import { routes } from 'src/utils/constants'
+import { hardRedirect } from 'src/utils/history'
+import logger from 'src/utils/logger'
+import { del, get, storageKeys } from 'src/utils/storage'
+
+export const queryClient = new QueryClient()
 
 export const reactQueryFetcher = <TData, TVariables>(
   query: string,
@@ -34,8 +41,35 @@ export const reactQueryFetcher = <TData, TVariables>(
     const json = await res.json()
 
     if (json.errors) {
-      const { message } = json.errors[0] || {}
-      throw new Error(message)
+      let accessDenied = false
+      let forbidden = false
+      json.errors.forEach(({ extensions, message }: any) => {
+        const code = extensions?.code
+        if (code) {
+          logger.error(message, { code })
+        } else {
+          logger.error(message)
+        }
+        if (code === ErrorCode.UNAUTHENTICATED || code === ErrorCode.METHOD_NOT_ALLOWED) {
+          accessDenied = true
+        }
+        if (code === ErrorCode.FORBIDDEN) {
+          forbidden = true
+        }
+      })
+      // TODO: Probably show the toast and refer user back to current page.
+      // Redirect to sign in page like a page refersh, clears current client cache..
+      if (forbidden) {
+        hardRedirect(routes.HOME)
+        return
+      }
+      if (accessDenied) {
+        del(storageKeys.AUTH_TOKEN)
+        // Something broke, so we delete and we redirect to the home page
+        hardRedirect(routes.HOME)
+        return
+      }
+      throw json
     }
 
     return json.data

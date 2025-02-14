@@ -11,9 +11,9 @@ import { Input } from 'src/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from 'src/components/ui/popover'
 import { FundResponseFragment, useCreatePortfolioFundMutation, useFundsQuery } from 'src/generated/graphql'
 import { portfolioAddFundFormSchema } from 'src/utils/form'
-import logger from 'src/utils/logger'
+import { queryClient } from 'src/utils/react-query-fetcher'
 import { toast } from 'src/utils/toast'
-import { cn } from 'src/utils/utils'
+import { cn, logOrDisplayError } from 'src/utils/utils'
 import { z } from 'zod'
 
 type PortfolioAddFundFormValues = z.infer<typeof portfolioAddFundFormSchema>
@@ -51,34 +51,27 @@ const PortfolioAddFundForm: React.FC<PortfolioAddFundFormProps> = ({ portfolioId
         },
       })
       if (createPortfolioFundResult.createPortfolioFund) {
+        queryClient.invalidateQueries({ queryKey: ['portfolioFunds', { input: { portfolioId } }] })
+
+        toast({
+          variant: 'success',
+          title: `Fund ${createPortfolioFundResult.createPortfolioFund.fund.name} added to portfolio`,
+        })
         return setShowAddFundDialog(false)
       }
     } catch (error: any) {
-      if (error.graphQLErrors) {
-        error.graphQLErrors.map((err: any) => {
-          if (err?.extensions?.fieldName) {
-            form.setError(err.extensions.fieldName, {
-              message: err.message,
-            })
-          }
-        })
-      } else {
-        logger.error(error)
-      }
+      logOrDisplayError<PortfolioAddFundFormValues>(error, form)
     }
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        {form.formState.errors?.general && (
+          <p className="px-1 text-sm text-red-600">
+            {form.formState.errors.general.message}
+          </p>
+        )}
         <FormField
           control={form.control}
           name="fundId"

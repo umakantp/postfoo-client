@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import * as React from 'react'
+import { FieldValues, UseFormReturn } from 'react-hook-form'
 import { HONEYPOT_DEFAULT_NAME_FIELD_NAME, HONEYPOT_DEFAULT_VALID_FROM_FIELD_NAME } from 'src/utils/constants'
 import logger from 'src/utils/logger'
 import { twMerge } from 'tailwind-merge'
@@ -113,4 +114,16 @@ export const getHoneypotFormValues = (formData: Record<string, string>) => {
 
 export const delay = (ms: number): Promise<void> => {
   return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+export const logOrDisplayError = <TFieldValues extends FieldValues>(data: any, form: UseFormReturn<TFieldValues>) => {
+  if (data.errors) {
+    data.errors.forEach(({ extensions, message }: any) => {
+      if (extensions?.fieldName) {
+        form.setError(extensions.fieldName, {
+          message: message,
+        })
+      }
+    })
+  }
 }

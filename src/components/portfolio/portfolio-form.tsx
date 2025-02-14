@@ -10,8 +10,7 @@ import { Textarea } from 'src/components/ui/textarea'
 import { useCreatePortfolioMutation } from 'src/generated/graphql'
 import { portfolioFormSchema } from 'src/utils/form'
 import { useNavigation } from 'src/utils/history'
-import logger from 'src/utils/logger'
-import { toast } from 'src/utils/toast'
+import { logOrDisplayError } from 'src/utils/utils'
 import { z } from 'zod'
 
 type PortfolioFormValues = z.infer<typeof portfolioFormSchema>
@@ -43,31 +42,18 @@ const PortfolioForm: React.FC = () => {
         return navigate('PORTFOLIO_DETAIL', { portfolioId: portfolio.id }, { })
       }
     } catch (error: any) {
-      if (error.graphQLErrors) {
-        error.graphQLErrors.map((err: any) => {
-          if (err?.extensions?.fieldName) {
-            form.setError(err.extensions.fieldName, {
-              message: err.message,
-            })
-          }
-        })
-      } else {
-        logger.error(error)
-      }
+      logOrDisplayError<PortfolioFormValues>(error, form)
     }
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        {form.formState.errors?.general && (
+          <p className="px-1 text-sm text-red-600">
+            {form.formState.errors.general.message}
+          </p>
+        )}
         <FormField
           control={form.control}
           name="name"
@@ -89,7 +75,7 @@ const PortfolioForm: React.FC = () => {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Bio</FormLabel>
+              <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="My all debut funds holding on the Zerodha Coin."
