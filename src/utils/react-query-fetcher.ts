@@ -10,7 +10,7 @@ export const queryClient = new QueryClient()
 export const reactQueryFetcher = <TData, TVariables>(
   query: string,
   variables?: TVariables,
-  options?: RequestInit['headers']
+  options?: RequestInit['headers'],
 ): (() => Promise<TData>) => {
   if (!process.env.NEXT_PUBLIC_API_URL) {
     throw new Error('NEXT_PUBLIC_API_URL is not set')
@@ -34,8 +34,8 @@ export const reactQueryFetcher = <TData, TVariables>(
       },
       body: JSON.stringify({
         query,
-        variables
-      })
+        variables,
+      }),
     })
 
     const json = await res.json()

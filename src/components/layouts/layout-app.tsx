@@ -6,7 +6,7 @@ import AuthProvider from 'src/components/providers/auth-provider'
 import { HoneypotInputProps, HoneypotProvider } from 'src/components/providers/honeypot-provider'
 
 import {
-  QueryClientProvider
+  QueryClientProvider,
 } from '@tanstack/react-query'
 import ThemeProvider from 'src/components/providers/theme-provider'
 import { Toaster } from 'src/components/ui/toaster'
@@ -18,7 +18,7 @@ interface LayoutAppProps {
   honeypotInputs: HoneypotInputProps,
 }
 
-const LayoutApp: React.FC<LayoutAppProps> = ({ children , honeypotInputs}) => {
+const LayoutApp: React.FC<LayoutAppProps> = ({ children, honeypotInputs}) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

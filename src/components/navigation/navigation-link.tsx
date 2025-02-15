@@ -13,7 +13,7 @@ export interface MenuItem {
 }
 
 interface NavigationLinkProps {
-  item:MenuItem,
+  item: MenuItem,
 }
 
 const NavigationLink: React.FC<NavigationLinkProps> = ({ item }) => {

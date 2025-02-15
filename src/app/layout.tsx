@@ -33,7 +33,7 @@ const RootLayout: React.FC<RootLayoutProps> = async ({ children }) => {
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
           fontSans.variable,
-          fontHeading.variable
+          fontHeading.variable,
         )}
       >
         <LayoutApp honeypotInputs={honeypotInputs}>

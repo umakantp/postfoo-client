@@ -6,7 +6,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table'
 import * as React from 'react'
 import PortfolioAddFundForm from 'src/components/portfolio/components/portfolio-add-fund-form'
@@ -48,7 +48,7 @@ const columns: ColumnDef<PortfolioFundCols>[] = [
     header: 'Cost',
     cell: ({ row }) => {
       return <span className="text-right">₹ {row.getValue('cost')}</span>
-    }
+    },
   },
   {
     accessorKey: 'units',
@@ -59,7 +59,7 @@ const columns: ColumnDef<PortfolioFundCols>[] = [
     header: 'Current Value',
     cell: ({ row }) => {
       return <span className="text-right">₹ {row.getValue('value')}</span>
-    }
+    },
   },
 ]
 
@@ -124,7 +124,7 @@ const PortfolioFunds: React.FC<PortfolioFundsProps> = ({ portfolio }) => {
                         ? null
                         : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                     </TableHead>
                   )
@@ -146,7 +146,7 @@ const PortfolioFunds: React.FC<PortfolioFundsProps> = ({ portfolio }) => {
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

@@ -121,8 +121,7 @@ const CountrySelect = ({
                       selectedCountry={selectedCountry}
                       onChange={onChange}
                     />
-                  ) : null,
-                )}
+                  ) : null)}
               </CommandGroup>
             </ScrollArea>
           </CommandList>

@@ -50,7 +50,7 @@ const PortfolioSelector: React.FC<PortfolioSelectorProps> = ({ showNewPortfolioD
                         'ml-auto',
                         selectedPortfolio.id === portfolio.id
                           ? 'opacity-100'
-                          : 'opacity-0'
+                          : 'opacity-0',
                       )}
                     />
                   </CommandItem>

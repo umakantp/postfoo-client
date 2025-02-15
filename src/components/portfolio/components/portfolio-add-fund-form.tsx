@@ -87,7 +87,7 @@ const PortfolioAddFundForm: React.FC<PortfolioAddFundFormProps> = ({ portfolioId
                       role="combobox"
                       className={cn(
                         'w-full justify-between',
-                        !field.value && 'text-muted-foreground'
+                        !field.value && 'text-muted-foreground',
                       )}
                     >
                       {sf ? `${sf.name}-${sf.type}-${sf.plan}` : 'Select fund'}
@@ -114,7 +114,7 @@ const PortfolioAddFundForm: React.FC<PortfolioAddFundFormProps> = ({ portfolioId
                                 'mr-2',
                                 fund.id === field.value
                                   ? 'opacity-100'
-                                  : 'opacity-0'
+                                  : 'opacity-0',
                               )}
                             />
                             {fund.name}-{fund.type}-{fund.plan}

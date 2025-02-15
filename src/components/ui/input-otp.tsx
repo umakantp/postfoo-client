@@ -15,7 +15,7 @@ const InputOTP = React.forwardRef<
     ref={ref}
     containerClassName={cn(
       'flex items-center gap-2 has-[:disabled]:opacity-50',
-      containerClassName
+      containerClassName,
     )}
     className={cn('disabled:cursor-not-allowed', className)}
     {...props}
@@ -43,7 +43,7 @@ const inputOTPDSlotVariants = cva(
     defaultVariants: {
       variant: 'default',
     },
-  }
+  },
 )
 
 const InputOTPSlot = React.forwardRef<
@@ -59,7 +59,7 @@ const InputOTPSlot = React.forwardRef<
       className={cn(
         inputOTPDSlotVariants({ variant }),
         isActive && 'z-10 ring-1 ring-ring',
-        className
+        className,
       )}
       {...props}
     >

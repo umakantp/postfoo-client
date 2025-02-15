@@ -86,7 +86,7 @@ const PortfolioAddStockForm: React.FC<PortfolioAddStockFormProps> = ({ portfolio
                       role="combobox"
                       className={cn(
                         'w-full justify-between',
-                        !field.value && 'text-muted-foreground'
+                        !field.value && 'text-muted-foreground',
                       )}
                     >
                       {sf ? `${sf.name}-${sf.symbol}-${sf.exchange}` : 'Select stock'}
@@ -113,7 +113,7 @@ const PortfolioAddStockForm: React.FC<PortfolioAddStockFormProps> = ({ portfolio
                                 'mr-2',
                                 stock.id === field.value
                                   ? 'opacity-100'
-                                  : 'opacity-0'
+                                  : 'opacity-0',
                               )}
                             />
                             {stock.name}-{stock.symbol}-{stock.exchange}

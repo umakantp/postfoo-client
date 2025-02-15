@@ -6,7 +6,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table'
 import * as React from 'react'
 import PortfolioAddStockForm from 'src/components/portfolio/components/portfolio-add-stock-form'
@@ -44,14 +44,14 @@ const columns: ColumnDef<PortfolioStockCols>[] = [
     header: 'Last Price',
     cell: ({ row }) => {
       return <span className="text-right">₹ {row.getValue('lastPrice')}</span>
-    }
+    },
   },
   {
     accessorKey: 'cost',
     header: 'Cost',
     cell: ({ row }) => {
       return <span className="text-right">₹ {row.getValue('cost')}</span>
-    }
+    },
   },
   {
     accessorKey: 'units',
@@ -62,7 +62,7 @@ const columns: ColumnDef<PortfolioStockCols>[] = [
     header: 'Current Value',
     cell: ({ row }) => {
       return <span className="text-right">₹ {row.getValue('value')}</span>
-    }
+    },
   },
 ]
 
@@ -127,7 +127,7 @@ const PortfolioStocks: React.FC<PortfolioStocksProps> = ({ portfolio }) => {
                         ? null
                         : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                     </TableHead>
                   )
@@ -149,7 +149,7 @@ const PortfolioStocks: React.FC<PortfolioStocksProps> = ({ portfolio }) => {
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
