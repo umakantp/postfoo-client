@@ -2,7 +2,7 @@
 
 PostFoo helps you keep track of your finances and information for you and your family
 
-This is deployed @ [postfoo.com](https://postfoo.com) and [server](https://github.com/umakantp/postfoo-server) at [gql.postfoo.com](https://gql.postfoo.com)
+This is deployed @ [postfoo.com](https://postfoo.com) and [server](https://github.com/postfoo/postfoo-server) at [gql.postfoo.com](https://gql.postfoo.com)
 
 ### Setup
 
@@ -109,7 +109,7 @@ On local, we do not send SMS. You can use a fake number like `+1234567890` and c
 
 ### Deployments
 
-Deployments are done manually by triggering the [Deploy script](https://github.com/umakantp/postfoo-client/actions/workflows/merge-dev-to-main.yml).
+Deployments are done manually by triggering the [Deploy script](https://github.com/postfoo/postfoo-client/actions/workflows/merge-dev-to-main.yml).
 
 ### Coding guidelines
 

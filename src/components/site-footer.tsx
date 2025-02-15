@@ -29,7 +29,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
             </a>
             . Open source and available on Github @ {' '}
             <a
-              href="https://github.com/umakantp/postfoo-client"
+              href="https://github.com/postfoo/postfoo-client"
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
@@ -37,7 +37,7 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
               postfoo-client
             </a> and {' '}
             <a
-              href="https://github.com/umakantp/postfoo-server"
+              href="https://github.com/postfoo/postfoo-server"
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"

@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/umakantp/postfoo-client.git"
+    "url": "git+ssh://git@github.com/postfoo/postfoo-client.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/umakantp/postfoo-client/issues"
+    "url": "https://github.com/postfoo/postfoo-client/issues"
   },
-  "homepage": "https://github.com/umakantp/postfoo-client#readme",
+  "homepage": "https://github.com/postfoo/postfoo-client#readme",
   "dependencies": {
     "@hookform/resolvers": "^4.0.0",
     "@radix-ui/react-checkbox": "^1.1.3",
