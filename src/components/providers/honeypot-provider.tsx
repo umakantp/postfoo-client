@@ -70,13 +70,3 @@ export const HoneypotProvider: React.FC<HoneypotProviderProps> = ({ children, ..
     </HoneypotContext.Provider>
   )
 }
-
-export const fetchHoneypotInputs = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-honeypot-inputs`)
-  try {
-    const data = await response.json()
-    return data.honeypot
-  } catch {
-    return {}
-  }
-}

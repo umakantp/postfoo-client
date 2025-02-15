@@ -15,7 +15,7 @@ import { queryClient } from 'src/utils/react-query-fetcher'
 
 interface LayoutAppProps {
   children: React.ReactNode,
-  honeypotInputs: HoneypotInputProps,
+  honeypotInputs?: HoneypotInputProps,
 }
 
 const LayoutApp: React.FC<LayoutAppProps> = ({ children, honeypotInputs}) => {
