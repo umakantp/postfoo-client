@@ -50,7 +50,7 @@ jobs:
         run: npm run build
 
       - name: Stop the Server
-        uses: garygrossgarten/github-action-ssh@release
+        uses: garygrossgarten/github-action-ssh@0.8.0
         with:
           host: ${{ secrets.POSTFOO_SSH_HOST }}
           port: ${{ secrets.POSTFOO_SSH_PORT }}
@@ -59,7 +59,7 @@ jobs:
           command: cd /root/superman/postfoo-client; pm2 stop superman; pm2 delete superman; mkdir -p /root/superman/postfoo-client
 
       - name: Deploy to DigitalOcean
-        uses: burnett01/rsync-deployments@7.0.1
+        uses: burnett01/rsync-deployments@7.0.2
         with:
           switches: -avzr --delete --checksum
           remote_path: /root/superman/postfoo-client
@@ -69,7 +69,7 @@ jobs:
           remote_key: ${{ secrets.POSTFOO_SSH_PKEY }}
 
       - name: Start the Server
-        uses: garygrossgarten/github-action-ssh@release
+        uses: garygrossgarten/github-action-ssh@0.8.0
         with:
           host: ${{ secrets.POSTFOO_SSH_HOST }}
           port: ${{ secrets.POSTFOO_SSH_PORT }}
