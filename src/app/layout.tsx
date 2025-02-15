@@ -29,7 +29,7 @@ const RootLayout: React.FC<RootLayoutProps> = async ({ children }) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-honeypot-inputs`, { cache: 'no-store' })
     const data = await response.json()
     honeypotInputs = data.honeypot
-  } catch (error) {
+  } catch {
     logger.error('Failed to fetch honeypot inputs')
   }
 
